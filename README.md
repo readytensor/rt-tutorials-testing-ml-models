@@ -1,8 +1,25 @@
 ## Introduction
 
-This repository demonstrates how to use incorporate input data validation for machine learning model implementations. We use Pydantic for validating the schema file and the train/test data.
+This repository is an implementation of the random forest model for the binary classification task. This repository is part of a tutorial series on Ready Tensor, a web platform for AI developers and users. The purpose of the tutorial series is to help AI developers create adaptable algorithm implementations that avoid hard-coding your logic to a specific dataset. This makes it easier to re-use your algorithms with new datasets in the future without requiring any code change.
 
-This repository is part of a tutorial series on Ready Tensor, a web platform for AI developers and users. The purpose of the tutorial series is to help AI developers create adaptable algorithm implementations that avoid hard-coding your logic to a specific dataset. This makes it easier to re-use your algorithms with new datasets in the future without requiring any code change.
+This particular repository is referenced in the tutorial [Testing ML models] on the Ready Tensor website. This tutorial covers the following topics:
+
+- Implementing Unit Tests: Focusing on writing unit tests for our binary classifier model using pytest, a popular testing framework.
+- Implementing Integration Tests: Covering integration tests using pytest for our binary classifier model.
+- Coverage Testing: Exploring code coverage analysis during development using pytest-cov, a powerful tool to measure code coverage and ensure a significant portion of your codebase is exercised during the testing process.
+- Performance Testing: Evaluating the efficiency and scalability of ML models during development under various conditions, helping identify potential bottlenecks and ensuring that your model meets desired performance criteria.
+
+We have included all four types of tests: unit, integration, coverage and performance in the repository.
+
+Note that the overall implementation contains:
+
+- A data schema definition created as per Ready Tensor specifications for the binary classifier problem.
+- A flexible preprocessing pipeline that can be easily adapted to new datasets, and other classifier models. We use SciKit-Learn and feature-engine to implement the preprocessing pipeline.
+- A random forest classifier built using Scikit-Learn.
+- A SHAP explainer built using the SHAP library. This explainer is used to provide local explanations for the predictions made by the model.
+- Hyperparameter tuning for the Random Forest model's hyperparameters built using Scikit-Optimize.
+- A FastAPI server to serve the model as a REST API.
+- Input data validation using Pydantic. This includes validation on the schema file, train/prediction input files, and inference request body.
 
 ## Repository Contents
 
@@ -57,15 +74,22 @@ binary_class_project/
 │   ├── train.py
 │   └── utils.py
 ├── tests/
-│   ├── <mirrors `/src` structure ...>
-│   ...
-│   ...
-│   └── test_utils.py
+│   ├── integration_tests/
+│   ├── performance_tests/
+│   ├── test_resources/
+│   ├── test_results/
+│   ├── unit_tests/
+│   │   ├── <mirrors /src structure>
+│   │   └── ...
+│   ├── __init__.py
+│   └── conftest.py
 ├── tmp/
 ├── .gitignore
 ├── LICENSE
+├── pytest.ini
 ├── README.md
-└── requirements.txt
+├── requirements.txt
+└── requirements-test.txt
 ```
 
 - **`/examples`**: This directory contains example files for the titanic dataset. Three files are included: `titanic_schema.json`, `titanic_train.csv` and `titanic_test.csv`. You can place these files in the `inputs/schema`, `inputs/data/training` and `inputs/data/testing` folders, respectively.
@@ -81,14 +105,23 @@ binary_class_project/
   - **`serve_utils.py`**: This script contains utility functions used by the `serve.py` script.
   - **`train.py`**: This script is used to train the model. It loads the data, preprocesses it, trains the model, and saves the artifacts in the path `./app/outputs/artifacts/`. It also saves a SHAP explainer object in the path `./app/outputs/artifacts/`.
   - **`utils.py`**: This script contains utility functions used by the other scripts.
-- **`/tests`**: This directory contains all the tests for the project. It mirrors the `src` directory structure for consistency. There is also a `test_resources` folder inside `/tests` which can contain any resources needed for the tests (e.g. sample data files).
-- **`/tmp`**: This directory is used for storing temporary files which are not necessary to commit to the repository.
+- **`/tests`**: This directory contains all the tests for the project and associated resources and results.
+  - **`integration_tests.py`**: This directory contains all the integration tests for the project. We cover four main workflows: data preprocessing, training, prediction, and inference service.
+  - **`performance_tests.py`**: This directory contains performance tests for the training and batch prediction workflows in the script `test_train_predict.py`. It also contains performance tests for the inference service workflow in the script `test_inference_apis.py`. Helper functions are defined in the script `performance_test_helpers.py`. Fixtures and other setup are contained in the script `conftest.py`.
+  - **`test_resources.py`**: This folder contains various resources needed in the tests, such as trained model artifacts (including the preprocessing pipeline, target encoder, explainer, etc.). These resources are used in integration tests and performance tests.
+  - **`test_results.py`**: This folder contains the results for the performance tests. These are persisted to disk for later analysis.
+  - **`unit_tests.py`**: This folder contains all the unit tests for the project. It is further divided into subdirectories mirroring the structure of the `src` folder. Each subdirectory contains unit tests for the corresponding script in the `src` folder.
+- **`/tmp`**: This directory is used for storing temporary files which are not to be committed to the repository.
 - **`.gitignore`**: This file specifies the files and folders that should be ignored by Git.
 - **`LICENSE`**: This file contains the license for the project.
+- **`pytest.ini`**: This file contains the configuration for pytest, including the markers used for tests.
 - **`README.md`**: This file contains the documentation for the project, explaining how to set it up and use it.
-- **`requirements.txt`**: This file lists the dependencies for the project, making it easier to install all necessary packages.
+- **`requirements.txt`**: This file lists the dependencies for the project, particularly to run the scripts in the `src` folder.
+- **`requirements-test.txt`**: This file lists the testing dependencies for the project. These are needed to run the tests in the `tests` folder.
 
 ## Usage
+
+To run the project:
 
 - Create your virtual environment and install dependencies listed in `requirements.txt`.
 - Place the following 3 input files in the sub-directories in `./app/inputs/`:
@@ -99,39 +132,12 @@ binary_class_project/
 - Run the script `predict.py` to run batch predictions using the trained model. This script will load the artifacts and create and save the predictions in a file called `predictions.csv` in the path `./app/outputs/predictions/`.
 - Run the script `serve.py` to start the inference service, which can be queried using the `/ping` and `/infer` endpoints. The service also provides local explanations for the predictions using the `/explain` endpoint.
 
-## Validations performed on schema file
+To run the tests:
 
-The implementation performs the following validations on the schema file:
-
-- **problemCategory** must be set to "binary_classification_base"
-- **version** must be set to "1.0"
-- **inputDatasets** must not be empty
-- **inputDatasets** must have a single key named "binaryClassificationBaseMainInput"
-- **idField** must be specified
-- **targetField** must be specified
-- **targetClass** must be specified
-- **predictorFields** must be a non-empty list of objects
-- Each **predictorFields** object must contain a **fieldName**
-- Each **predictorFields** object must have a valid **dataType** of "**CATEGORICAL**", "**INT**", "**REAL**", or - "**NUMERIC**"
-
-## Validations performed on train and test data files
-
-The implementation performs the following validations on the schema file:
-
-- ID field must be present. The name of the ID field is defined in the schema file.
-- Target field must be present if data is for training. The name of the target field is defined in the schema file.
-- All categorical or numerical features specified in the schema file must be present in the data file.
-
-## Validations performed on inference request data
-
-The implementation performs the following validations on the inference request data:
-
-- The request body contains a key 'instances' with a list of dictionaries as its value.
-- The list is not empty (i.e., at least one instance must be provided).
-- Each instance contains the 'id' field whose name is defined in the schema file.
-- Each instance contains all the required numerical and categorical features as defined in the schema file.
-- Values for each feature in each instance are of the correct data type. Values are allowed to be null (i.e., missing).
-- For categorical features, the given value must be one of the categories as defined in the schema file.
+- Install dependencies listed in `requirements-test.txt`.
+- Run the command `pytest` from the root directory of the repository.
+- To run specific scripts, use the command `pytest <path_to_script>`.
+- To run performance tests (which take longer to run): use the command `pytest -m performance`.
 
 ## Requirements
 
