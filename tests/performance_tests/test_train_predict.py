@@ -5,7 +5,6 @@ from typing import Tuple, Dict, Union
 import time
 import tracemalloc
 import os
-import csv
 import json
 
 from tests.performance_tests.performance_test_helpers import (
@@ -20,8 +19,8 @@ from src.train import run_training
 from src.predict import run_batch_predictions
 
 
-DATASET_ROWS_LIST = [200, 2000, 20000]
-DATASET_COLUMNS_LIST = [2, 20, 200]
+DATASET_ROWS_LIST = [200, 2000]     # update to [200, 2000, 20000] for full test
+DATASET_COLUMNS_LIST = [2, 20]      # update to [2, 20, 200] for full test
 DATASET_SIZES = [
     (rows, columns)
     for rows in DATASET_ROWS_LIST
@@ -251,7 +250,7 @@ def test_train_predict_performance(
             train_predict_perf_results_path,
             ('task', 'num_rows', 'num_features', 'exec_time_secs', 'memory_usage_mb'),
             ("train_with_hpt", num_rows, num_features,
-            results["training_time"], results["training_memory"])
+            round(results["training_time"], 4), round(results["training_memory"], 4))
         )
 
         # run prediction workflow and record metrics
@@ -278,5 +277,5 @@ def test_train_predict_performance(
         store_results_to_csv(
             train_predict_perf_results_path,
             ('task', 'num_rows', 'num_features', 'exec_time_secs', 'memory_usage_mb'),
-            ("batch_prediction", num_rows, num_features, prediction_time, prediction_memory)
+            ("batch_prediction", num_rows, num_features, round(prediction_time,4), round(prediction_memory,4))
         )

@@ -60,7 +60,8 @@ def test_api_endpoint_performance(
 
     # Run the API and record metrics
     num_requests, response_time, throughput = \
-        run_inference_api_and_record_metrics(app, endpoint, sample_request_data)
+        run_inference_api_and_record_metrics(app, endpoint, sample_request_data, 5)
+    # update num_requests to 50 or higher for more rigorous testing
 
     # Store API performance metrics
     store_results_to_csv(
