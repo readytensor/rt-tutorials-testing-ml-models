@@ -4,7 +4,7 @@ import numpy as np
 from feature_engine.imputation import CategoricalImputer, AddMissingIndicator
 from sklearn.preprocessing import StandardScaler
 from sklearn.exceptions import NotFittedError
-from preprocessing.custom_transformers import (
+from src.preprocessing.custom_transformers import (
     ColumnSelector,
     TypeCaster,
     TransformerWrapper,

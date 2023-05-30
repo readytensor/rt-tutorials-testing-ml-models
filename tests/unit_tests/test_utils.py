@@ -5,7 +5,6 @@ import tempfile
 import pytest
 import pandas as pd
 import numpy as np
-from tempfile import TemporaryDirectory
 
 from src.utils import (
     read_json_as_dict,
@@ -13,6 +12,7 @@ from src.utils import (
     set_seeds,
     split_train_val,
     save_dataframe_as_csv)
+
 
 
 def test_read_json_as_dict_with_file_path():

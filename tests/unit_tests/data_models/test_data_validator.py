@@ -1,7 +1,7 @@
 import pytest
 from typing import Any
 import pandas as pd
-from data_models.data_validator import validate_data  
+from src.data_models.data_validator import validate_data  
 
 
 def test_validate_data(

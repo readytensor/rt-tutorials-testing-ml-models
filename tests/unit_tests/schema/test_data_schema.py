@@ -65,11 +65,9 @@ def test_get_allowed_values_for_categorical_feature():
     # Then
     assert allowed_values == ["A", "B"]
 
-    # When
+    # When / Then
     with pytest.raises(ValueError):
         schema.get_allowed_values_for_categorical_feature("Invalid feature")
-
-    # Then: Exception is raised
 
 
 def test_get_example_value_for_numeric_feature():

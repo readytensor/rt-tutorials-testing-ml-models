@@ -3,8 +3,8 @@ import pandas as pd
 import numpy as np
 from tempfile import TemporaryDirectory
 
-from schema.data_schema import BinaryClassificationSchema
-from preprocessing.preprocess import (
+from src.schema.data_schema import BinaryClassificationSchema
+from src.preprocessing.preprocess import (
     train_pipeline_and_target_encoder,
     transform_data,
     save_pipeline_and_target_encoder,

@@ -1,6 +1,6 @@
 import pytest
 from pydantic import ValidationError
-from data_models.schema_validator import (
+from src.data_models.schema_validator import (
     ID, Target, DataType, Feature, SchemaModel, validate_schema_dict
 )
 

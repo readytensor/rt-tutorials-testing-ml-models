@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
 
-from preprocessing.target_encoder import CustomTargetEncoder
+from src.preprocessing.target_encoder import CustomTargetEncoder
 
 
 def test_custom_target_encoder_valid():

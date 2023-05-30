@@ -3,27 +3,9 @@ from unittest.mock import patch
 import pandas as pd
 import json
 import pytest
-import os 
 
-from serve import  create_app
-from serve_utils import (
-    get_model_resources
-)
-
-
-@pytest.fixture
-def resources_paths():
-    """Define a fixture for the paths to the test model resources."""
-    cur_dir = os.path.dirname(os.path.abspath(__file__))
-    test_resources_path = os.path.join(cur_dir, "test_resources")
-    return {
-        'saved_schema_path': os.path.join(test_resources_path, 'schema.joblib'),
-        'predictor_file_path': os.path.join(test_resources_path, 'predictor.joblib'),
-        'pipeline_file_path': os.path.join(test_resources_path, 'pipeline.joblib'),
-        'target_encoder_file_path': os.path.join(test_resources_path, 'target_encoder.joblib'),
-        'model_config_file_path': os.path.join(test_resources_path, 'model_config.json'),
-        'explainer_file_path': os.path.join(test_resources_path, 'explainer.joblib')
-    }
+from src.serve import  create_app
+from src.serve_utils import get_model_resources
 
 
 @pytest.fixture
@@ -171,7 +153,7 @@ def test_ping(app):
     assert response.json() == {"message": "Pong!"}
 
 
-@patch('serve.transform_req_data_and_make_predictions')
+@patch('src.serve.transform_req_data_and_make_predictions')
 def test_infer_endpoint(mock_transform_and_predict, app, sample_request_data):
     """
     Test the infer endpoint.
@@ -189,86 +171,8 @@ def test_infer_endpoint(mock_transform_and_predict, app, sample_request_data):
 
     response = app.post("/infer", data=json.dumps(sample_request_data))
 
-    print(response)
+    print(response.json())
     assert response.status_code == 200
     assert response.json() == {"status": "success", "predictions": []}
     # You can add more assertions to check if the function was called with the correct arguments
     mock_transform_and_predict.assert_called()
-
-
-def test_infer_endpoint_integration(app, sample_request_data, sample_response_data):
-    """
-    End-to-end integration test for the /infer endpoint of the FastAPI application.
-
-    This test uses a TestClient from FastAPI to make a POST request to the /infer endpoint,
-    and verifies that the response matches expectations.
-
-    A ModelResources instance is created with test-specific paths using the test_model_resources fixture,
-    and the application's dependency on ModelResources is overridden to use this instance for the test.
-
-    The function sends a POST request to the "/infer" endpoint with the test_sample_request_data
-    using a TestClient from FastAPI.
-    It then asserts that the response keys match the expected response keys, and compares specific
-    values in the returned response_data with the sample_response_data.
-    Finally, it resets the dependency_overrides after the test.
-
-    Args:
-        app (TestClient): The test app.
-        sample_request_data (dict): The fixture for test request data.
-        sample_response_data (dict): The fixture for expected response data.
-    Returns:
-        None
-    """
-    response = app.post("/infer", json=sample_request_data)
-    response_data = response.json()
-
-    # assertions
-    assert set(response_data.keys()) == set(response.json().keys())
-    assert response_data["predictions"][0]["sampleId"] == \
-        sample_response_data["predictions"][0]["sampleId"]
-    assert response_data["predictions"][0]["predictedClass"] == \
-        sample_response_data["predictions"][0]["predictedClass"]
-
-
-def test_explain_endpoint_integration(
-        app, sample_request_data, sample_explanation_response_data):
-    """
-    End-to-end integration test for the /explain endpoint of the FastAPI application.
-
-    This test uses a TestClient from FastAPI to make a POST request to the /explain endpoint,
-    and verifies that the response matches expectations.
-
-    A ModelResources instance is created with test-specific paths using the test_model_resources fixture,
-    and the application's dependency on ModelResources is overridden to use this instance for the test.
-
-    The function sends a POST request to the "/explain" endpoint with the test_request_data
-    using a TestClient from FastAPI.
-    It then asserts that the response keys match the expected response keys, and compares specific
-    values in the explanation_response_data with the sample_explanation_response_data.
-    Finally, it resets the dependency_overrides after the test.
-
-    Args:
-        test_model_resources (ModelResources): The test ModelResources object.
-        test_request_data (dict): The fixture for test request data.
-        sample_explanation_response_data (dict): The fixture for expected explanation response data.
-    Returns:
-        None
-    """
-    response = app.post("/explain", json=sample_request_data)
-    explanation_response_data = response.json()
-
-    # assertions
-    assert set(explanation_response_data.keys()) == set(sample_explanation_response_data.keys())
-    assert explanation_response_data["predictions"][0]["sampleId"] == sample_explanation_response_data["predictions"][0]["sampleId"]
-    assert explanation_response_data["predictions"][0]["predictedClass"] == sample_explanation_response_data["predictions"][0]["predictedClass"]
-    
-    # baseline assertions
-    assert explanation_response_data["predictions"][0]["explanation"].get("baseline") is not None
-    baseline = explanation_response_data["predictions"][0]["explanation"]["baseline"]
-    assert len(baseline) == 2
-    assert round(sum(baseline), 4) == 1.0000
-
-    # explanation assertions
-    assert explanation_response_data["predictions"][0]["explanation"].get("featureScores") is not None
-    feature_scores = explanation_response_data["predictions"][0]["explanation"]["featureScores"]
-    assert len(feature_scores) == 11

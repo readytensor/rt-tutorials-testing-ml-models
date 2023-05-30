@@ -3,7 +3,7 @@ import pytest
 from unittest.mock import patch, MagicMock
 import pprint
 
-from serve_utils import (
+from src.serve_utils import (
     get_model_resources,
     generate_unique_request_id,
     create_predictions_response,

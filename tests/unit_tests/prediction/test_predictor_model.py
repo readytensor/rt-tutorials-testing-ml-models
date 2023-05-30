@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.datasets import make_classification
 from sklearn.linear_model import LogisticRegression
 
-from prediction.predictor_model import (
+from src.prediction.predictor_model import (
     Classifier,
     train_predictor_model,
     predict_with_model,

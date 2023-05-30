@@ -3,12 +3,8 @@ import os
 import numpy as np
 import pandas as pd
 import json
-from typing import Any
-from skopt.space import Real, Categorical, Integer, Space
-from skopt.optimizer import Optimizer
-from skopt.utils import OptimizeResult
-from skopt import gp_minimize
-from hyperparameter_tuning.tuner import (
+from skopt.space import Real, Categorical, Integer
+from src.hyperparameter_tuning.tuner import (
     SKOHyperparameterTuner,
     tune_hyperparameters
 )
@@ -30,7 +26,7 @@ def default_hyperparameters():
 def default_hyperparameters_file_path(default_hyperparameters, tmpdir):
     """ Fixture to create and save a sample default hyperparameters file for testing"""
     default_hyperparameters_fpath = tmpdir.join('default_hyperparameters.json')
-    with open(default_hyperparameters_fpath, 'w') as file:
+    with open(default_hyperparameters_fpath, 'w', encoding="utf-8") as file:
         json.dump(default_hyperparameters, file)
     return default_hyperparameters_fpath
 
@@ -136,8 +132,8 @@ def test_get_objective_func(mocker, tuner, mock_data, default_hyperparameters):
     """
     mock_train_X, mock_train_y, mock_valid_X, mock_valid_y = mock_data
 
-    mock_train = mocker.patch("hyperparameter_tuning.tuner.train_predictor_model", return_value="mock_classifier")
-    mock_evaluate = mocker.patch("hyperparameter_tuning.tuner.evaluate_predictor_model", return_value=0.8)
+    mock_train = mocker.patch("src.hyperparameter_tuning.tuner.train_predictor_model", return_value="mock_classifier")
+    mock_evaluate = mocker.patch("src.hyperparameter_tuning.tuner.evaluate_predictor_model", return_value=0.8)
     
     objective_func = tuner._get_objective_func(mock_train_X, mock_train_y, mock_valid_X, mock_valid_y)
     result = objective_func([1, 2.0, 5, 0.5, "a"])
@@ -149,7 +145,7 @@ def test_get_objective_func(mocker, tuner, mock_data, default_hyperparameters):
 def test_get_hpt_space(tuner):
     """Tests the `get_hpt_space` method of the `SKOHyperparameterTuner` class.
     
-    This test verifies that the `get_hpt_space` method correctly returns 
+    This test verifies that the `get_hpt_space` method correctly returns
     a list of hyperparameter space objects.
     """
     hpt_space = tuner.get_hpt_space()
@@ -173,7 +169,7 @@ def test_run_hyperparameter_tuning(mocker, tuner, mock_data):
     the hyperparameter tuning process and returns the best hyperparameters and score.
     """
     mock_train_X, mock_train_y, mock_valid_X, mock_valid_y = mock_data
-    mock_gp_minimize = mocker.patch("hyperparameter_tuning.tuner.gp_minimize", return_value="mock_optimizer_results")
+    mock_gp_minimize = mocker.patch("src.hyperparameter_tuning.tuner.gp_minimize", return_value="mock_optimizer_results")
     mock_save_hpt_results = mocker.patch.object(tuner, "save_hpt_summary_results")
     mock_get_best_hps = mocker.patch.object(tuner, "get_best_hyperparameters", return_value="mock_best_hps")
 
@@ -244,7 +240,7 @@ def test_tune_hyperparameters(
     mock_train_X, mock_train_y, mock_valid_X, mock_valid_y = mock_data
 
     # Mock SKOHyperparameterTuner
-    mock_tuner = mocker.patch("hyperparameter_tuning.tuner.SKOHyperparameterTuner")
+    mock_tuner = mocker.patch("src.hyperparameter_tuning.tuner.SKOHyperparameterTuner")
     # Mock return value of run_hyperparameter_tuning method
     mock_tuner.return_value.run_hyperparameter_tuning.return_value = {"hp1": 1, "hp2": 2}
 
