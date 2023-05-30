@@ -99,11 +99,11 @@ binary_class_project/
 - **`/src`**: This directory holds the source code for the project. It is further divided into various subdirectories such as `config` for configuration files, `data_models` for data models for input validation, `hyperparameter_tuning` for hyperparameter-tuning (HPT) related files, `prediction` for prediction model scripts, `preprocessing` for data preprocessing scripts, `schema` for schema scripts, and `xai` for explainable AI scripts.
 - **`/src/data_models`**: This directory contains the data models for input validation. It is further divided into `data_validator.py` for data validation, `infer_request_model.py` for inference request validation, and `schema_validator.py` for schema validation.
 - Within **`/src`** folder: We have the following main scripts:
-  - **`logger.py`**: This script contains the centralized logger setup for the project. It is used the `train.py`, `predict.py` and `serve.py` scripts. Logging is stored in the path `./app/outputs/logs/`.
-  - **`predict.py`**: This script is used to run batch predictions using the trained model. It loads the artifacts and creates and saves the predictions in a file called `predictions.csv` in the path `./app/outputs/predictions/`.
+  - **`logger.py`**: This script contains the centralized logger setup for the project. It is used the `train.py`, `predict.py` and `serve.py` scripts. Logging is stored in the path `./outputs/logs/`.
+  - **`predict.py`**: This script is used to run batch predictions using the trained model. It loads the artifacts and creates and saves the predictions in a file called `predictions.csv` in the path `./outputs/predictions/`.
   - **`serve.py`**: This script is used to serve the model as a REST API. It loads the artifacts and creates a FastAPI server to serve the model.
   - **`serve_utils.py`**: This script contains utility functions used by the `serve.py` script.
-  - **`train.py`**: This script is used to train the model. It loads the data, preprocesses it, trains the model, and saves the artifacts in the path `./app/outputs/artifacts/`. It also saves a SHAP explainer object in the path `./app/outputs/artifacts/`.
+  - **`train.py`**: This script is used to train the model. It loads the data, preprocesses it, trains the model, and saves the artifacts in the path `./model/artifacts/`. It also saves a SHAP explainer object in the path `./model/artifacts/`. When the train task is run with a flag to perform hyperparameter tuning, it also saves the hyperparameter tuning results in the path `./outputs/hpt_outputs/`.
   - **`utils.py`**: This script contains utility functions used by the other scripts.
 - **`/tests`**: This directory contains all the tests for the project and associated resources and results.
   - **`integration_tests.py`**: This directory contains all the integration tests for the project. We cover four main workflows: data preprocessing, training, prediction, and inference service.
@@ -124,12 +124,12 @@ binary_class_project/
 To run the project:
 
 - Create your virtual environment and install dependencies listed in `requirements.txt`.
-- Place the following 3 input files in the sub-directories in `./app/inputs/`:
-  - Train data, which must be a CSV file, to be placed in `./app/inputs/data/training/`. File name can be any; extension must be ".csv".
-  - Test data, which must be a CSV file, to be placed in `./app/inputs/data/testing/`. File name can be any; extension must be ".csv".
-  - The schema file in JSON format , to be placed in `./app/inputs/data_config/`. The schema conforms to Ready Tensor specification for the **Binary Classification-Base** category. File name can be any; extension must be ".json".
-- Run the script `train.py` to train the random forest classifier model. This will save the model artifacts, including the preprocessing pipeline and label encoder, in the path `./app/outputs/artifacts/`.
-- Run the script `predict.py` to run batch predictions using the trained model. This script will load the artifacts and create and save the predictions in a file called `predictions.csv` in the path `./app/outputs/predictions/`.
+- Place the following 3 input files in the sub-directories in `./src/inputs/`:
+  - Train data, which must be a CSV file, to be placed in `./src/inputs/data/training/`. File name can be any; extension must be ".csv".
+  - Test data, which must be a CSV file, to be placed in `./src/inputs/data/testing/`. File name can be any; extension must be ".csv".
+  - The schema file in JSON format , to be placed in `./src/inputs/data_config/`. The schema conforms to Ready Tensor specification for the **Binary Classification-Base** category. File name can be any; extension must be ".json".
+- Run the script `train.py` to train the random forest classifier model. This will save the model artifacts, including the preprocessing pipeline and label encoder, in the path `./model/artifacts/`.
+- Run the script `predict.py` to run batch predictions using the trained model. This script will load the artifacts and create and save the predictions in a file called `predictions.csv` in the path `./outputs/predictions/`.
 - Run the script `serve.py` to start the inference service, which can be queried using the `/ping` and `/infer` endpoints. The service also provides local explanations for the predictions using the `/explain` endpoint.
 
 To run the tests:
@@ -161,4 +161,17 @@ These packages can be installed by running the following command:
 
 ```python
 pip install -r requirements.txt
+```
+
+For testing, the following packages are required:
+
+```makefile
+pytest==6.2.5
+pytest-cov==3.0.0
+```
+
+You can install these packages by running the following command:
+
+```python
+pip install -r requirements-test.txt
 ```
