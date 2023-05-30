@@ -124,13 +124,13 @@ binary_class_project/
 To run the project:
 
 - Create your virtual environment and install dependencies listed in `requirements.txt`.
-- Place the following 3 input files in the sub-directories in `./src/inputs/`:
-  - Train data, which must be a CSV file, to be placed in `./src/inputs/data/training/`. File name can be any; extension must be ".csv".
-  - Test data, which must be a CSV file, to be placed in `./src/inputs/data/testing/`. File name can be any; extension must be ".csv".
-  - The schema file in JSON format , to be placed in `./src/inputs/data_config/`. The schema conforms to Ready Tensor specification for the **Binary Classification-Base** category. File name can be any; extension must be ".json".
-- Run the script `train.py` to train the random forest classifier model. This will save the model artifacts, including the preprocessing pipeline and label encoder, in the path `./model/artifacts/`.
-- Run the script `predict.py` to run batch predictions using the trained model. This script will load the artifacts and create and save the predictions in a file called `predictions.csv` in the path `./outputs/predictions/`.
-- Run the script `serve.py` to start the inference service, which can be queried using the `/ping` and `/infer` endpoints. The service also provides local explanations for the predictions using the `/explain` endpoint.
+- Place the following 3 input files in the sub-directories in `./inputs/`:
+  - Train data, which must be a CSV file, to be placed in `./inputs/data/training/`. File name can be any; extension must be ".csv".
+  - Test data, which must be a CSV file, to be placed in `./inputs/data/testing/`. File name can be any; extension must be ".csv".
+  - The schema file in JSON format , to be placed in `./inputs/schema/`. The schema conforms to Ready Tensor specification for the **Binary Classification-Base** category. File name can be any; extension must be ".json".
+- Run the script `src/train.py` to train the random forest classifier model. This will save the model artifacts, including the preprocessing pipeline and label encoder, in the path `./model/artifacts/`.
+- Run the script `src/predict.py` to run batch predictions using the trained model. This script will load the artifacts and create and save the predictions in a file called `predictions.csv` in the path `./outputs/predictions/`.
+- Run the script `src/serve.py` to start the inference service, which can be queried using the `/ping` and `/infer` endpoints. The service also provides local explanations for the predictions using the `/explain` endpoint.
 
 To run the tests:
 
