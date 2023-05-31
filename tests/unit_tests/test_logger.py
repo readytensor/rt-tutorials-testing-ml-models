@@ -29,7 +29,6 @@ def test_get_logger(caplog: Any) -> None:
     assert logger.name == task_name
     assert len(logger.handlers) == 1
     assert isinstance(logger.handlers[0], logging.StreamHandler)
-    assert isinstance(logger.handlers[1], logging.FileHandler)
 
     # Log a message to test handlers
     logger.info("Test log message")
