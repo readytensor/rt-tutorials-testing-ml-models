@@ -101,4 +101,3 @@ def test_create_predictions_dataframe_mismatch_class_names_and_predictions():
     assert str(exception_info.value) == \
         "Length of class names does not match number of prediction columns", \
             "Exception message does not match"
-

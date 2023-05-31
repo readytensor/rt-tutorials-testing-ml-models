@@ -45,6 +45,8 @@ class ShapClassificationExplainer():
         Returns:
             'Explainer': instance of shap Explainer from shap library
         """
+        print(class_names)
+        print(self._explainer_data.columns)
         return Explainer(
             model=lambda instances: \
                 predict_with_model(predictor_model, instances, return_probs=True),

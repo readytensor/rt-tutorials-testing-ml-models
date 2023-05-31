@@ -16,7 +16,7 @@ from config import paths
 from logger import get_logger, log_error
 from data_models.data_validator import validate_data
 
-logger = get_logger(log_file_path=paths.PREDICT_LOG_FILE_PATH, task_name="predict")
+logger = get_logger(task_name="predict")
 
 
 def create_predictions_dataframe(

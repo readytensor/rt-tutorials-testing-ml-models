@@ -1,8 +1,8 @@
 import os
 import pandas as pd
 
-from src.predict import run_batch_predictions
-from src.train import run_training
+from predict import run_batch_predictions
+from train import run_training
 
 
 def test_integration_run_batch_predictions_without_hpt(

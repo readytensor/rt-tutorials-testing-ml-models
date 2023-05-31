@@ -37,8 +37,8 @@ binary_class_project/
 ├── model/
 │   └── artifacts/
 ├── outputs/
+│   ├── errors/
 │   ├── hpt_outputs/
-│   ├── logs/
 │   └── predictions/
 ├── src/
 │   ├── config/
@@ -67,6 +67,7 @@ binary_class_project/
 │   ├── xai/
 │   │   ├── __init__.json
 │   │   └── explainer.py
+│   ├── __init__.py
 │   ├── logger.py
 │   ├── predict.py
 │   ├── serve.py
@@ -95,11 +96,11 @@ binary_class_project/
 - **`/examples`**: This directory contains example files for the titanic dataset. Three files are included: `titanic_schema.json`, `titanic_train.csv` and `titanic_test.csv`. You can place these files in the `inputs/schema`, `inputs/data/training` and `inputs/data/testing` folders, respectively.
 - **`/inputs`**: This directory contains all the input files for your project, including the data and schema files. The data is further divided into testing and training subsets.
 - **`/model/artifacts`**: This directory is used to store the model artifacts, such as trained models and their parameters.
-- **`/outputs`**: The outputs directory contains all output files, including the prediction results, logs, and hyperparameter tuning outputs.
+- **`/outputs`**: The outputs directory contains sub-directories for error logs, and hyperparameter tuning outputs, and prediction results. Note that model artifacts should not be saved in this directory. Instead, they should be saved in the `/model/artifacts` directory.
 - **`/src`**: This directory holds the source code for the project. It is further divided into various subdirectories such as `config` for configuration files, `data_models` for data models for input validation, `hyperparameter_tuning` for hyperparameter-tuning (HPT) related files, `prediction` for prediction model scripts, `preprocessing` for data preprocessing scripts, `schema` for schema scripts, and `xai` for explainable AI scripts.
 - **`/src/data_models`**: This directory contains the data models for input validation. It is further divided into `data_validator.py` for data validation, `infer_request_model.py` for inference request validation, and `schema_validator.py` for schema validation.
 - Within **`/src`** folder: We have the following main scripts:
-  - **`logger.py`**: This script contains the centralized logger setup for the project. It is used the `train.py`, `predict.py` and `serve.py` scripts. Logging is stored in the path `./outputs/logs/`.
+  - **`logger.py`**: This script contains the centralized logger setup for the project. It is used the `train.py`, `predict.py` and `serve.py` scripts. Errors are persisted in the path `./outputs/errors/`.
   - **`predict.py`**: This script is used to run batch predictions using the trained model. It loads the artifacts and creates and saves the predictions in a file called `predictions.csv` in the path `./outputs/predictions/`.
   - **`serve.py`**: This script is used to serve the model as a REST API. It loads the artifacts and creates a FastAPI server to serve the model.
   - **`serve_utils.py`**: This script contains utility functions used by the `serve.py` script.
@@ -124,10 +125,7 @@ binary_class_project/
 To run the project:
 
 - Create your virtual environment and install dependencies listed in `requirements.txt`.
-- Place the following 3 input files in the sub-directories in `./inputs/`:
-  - Train data, which must be a CSV file, to be placed in `./inputs/data/training/`. File name can be any; extension must be ".csv".
-  - Test data, which must be a CSV file, to be placed in `./inputs/data/testing/`. File name can be any; extension must be ".csv".
-  - The schema file in JSON format , to be placed in `./inputs/schema/`. The schema conforms to Ready Tensor specification for the **Binary Classification-Base** category. File name can be any; extension must be ".json".
+- Move the three example files (`titanic_schema.json`, `titanic_train.csv` and `titanic_test.csv`) into the `inputs/schema`, `inputs/data/training` and `inputs/data/testing` folders, respectively.
 - Run the script `src/train.py` to train the random forest classifier model. This will save the model artifacts, including the preprocessing pipeline and label encoder, in the path `./model/artifacts/`.
 - Run the script `src/predict.py` to run batch predictions using the trained model. This script will load the artifacts and create and save the predictions in a file called `predictions.csv` in the path `./outputs/predictions/`.
 - Run the script `src/serve.py` to start the inference service, which can be queried using the `/ping` and `/infer` endpoints. The service also provides local explanations for the predictions using the `/explain` endpoint.
@@ -141,36 +139,13 @@ To run the tests:
 
 ## Requirements
 
-The code requires Python 3 and the following libraries:
-
-```makefile
-fastapi==0.70.0
-uvicorn==0.15.0
-pydantic==1.8.2
-pandas==1.5.2
-numpy==1.20.3
-scikit-learn==1.0
-feature-engine==1.2.0
-imbalanced-learn==0.8.1
-scikit-optimize==0.9.0
-httpx==0.24.0
-shap==0.41.0
-```
-
-These packages can be installed by running the following command:
+Dependencies are listed in the file `requirements.txt`. These packages can be installed by running the following command:
 
 ```python
 pip install -r requirements.txt
 ```
 
-For testing, the following packages are required:
-
-```makefile
-pytest==6.2.5
-pytest-cov==3.0.0
-```
-
-You can install these packages by running the following command:
+For testing, dependencies are listed in the file `requirements-test.txt`. You can install these packages by running the following command:
 
 ```python
 pip install -r requirements-test.txt

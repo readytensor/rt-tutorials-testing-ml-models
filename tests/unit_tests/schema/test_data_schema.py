@@ -98,11 +98,9 @@ def test_get_example_value_for_numeric_feature():
     # Then
     assert example_value == 123.45
 
-    # When
+    # When / Then
     with pytest.raises(ValueError):
         schema.get_example_value_for_feature("Invalid feature")
-
-    # Then: Exception is raised
 
 
 def test_get_description_for_id_target_and_features():
@@ -140,11 +138,10 @@ def test_get_description_for_id_target_and_features():
     assert feature_1_description == "Numeric feature"
     assert feature_2_description == "Categorical feature"
 
-    # When
+    # When / Then
     with pytest.raises(ValueError):
         schema.get_description_for_feature("Invalid Feature")
 
-    # Then: Exception is raised
 
 def test_is_feature_nullable():
     """
@@ -172,14 +169,14 @@ def test_is_feature_nullable():
     is_nullable = schema.is_feature_nullable("Test feature 1")
 
     # Then
-    assert is_nullable == True
+    assert is_nullable is True
 
     # When
     is_not_nullable = schema.is_feature_nullable("Test feature 2")
 
     # Then
-    assert is_not_nullable == False
+    assert is_not_nullable is False
 
-    # When / then
+    # When / Then
     with pytest.raises(ValueError):
         schema.is_feature_nullable("Invalid feature")

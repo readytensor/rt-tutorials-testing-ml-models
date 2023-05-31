@@ -20,7 +20,7 @@ from logger import get_logger, log_error
 from data_models.data_validator import validate_data
 
 
-logger = get_logger(log_file_path=paths.SERVE_LOG_FILE_PATH, task_name="serve", reset_file=True)
+logger = get_logger(task_name="serve")
 
 
 class ModelResources:

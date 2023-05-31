@@ -2,7 +2,7 @@ from fastapi.testclient import TestClient
 import pytest
 from time import perf_counter
 import os
-from src.serve import  create_app
+from serve import  create_app
 
 from tests.performance_tests.performance_test_helpers import (
     delete_file_if_exists,

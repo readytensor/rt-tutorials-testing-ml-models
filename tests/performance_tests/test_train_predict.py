@@ -15,8 +15,8 @@ from tests.performance_tests.performance_test_helpers import (
     store_results_to_csv
 )
 
-from src.train import run_training
-from src.predict import run_batch_predictions
+from train import run_training
+from predict import run_batch_predictions
 
 
 DATASET_ROWS_LIST = [200, 2000]     # update to [200, 2000, 20000] for full test

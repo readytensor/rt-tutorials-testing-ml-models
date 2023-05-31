@@ -26,7 +26,7 @@ from logger import get_logger, log_error
 from data_models.data_validator import validate_data
 
 
-logger = get_logger(log_file_path=paths.TRAIN_LOG_FILE_PATH, task_name="train")
+logger = get_logger(task_name="train")
 
 
 def run_training(
@@ -158,8 +158,8 @@ def run_training(
         logger.info("Training completed successfully")
 
     except Exception as exc:
-        err_msg = "Error occurred during prediction."
-        # Log the error to the general logging file 'train.log'
+        err_msg = "Error occurred during training."
+        # Log the error
         logger.error(f"{err_msg} Error: {str(exc)}")
         # Log the error to the separate logging file 'train-error.log'
         log_error(message=err_msg, error=exc, error_fpath=paths.TRAIN_ERROR_FILE_PATH)

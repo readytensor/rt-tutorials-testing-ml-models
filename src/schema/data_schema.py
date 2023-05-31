@@ -1,5 +1,5 @@
 from typing import List, Dict, Tuple
-import joblib 
+import joblib
 
 from utils import read_json_as_dict
 from data_models.schema_validator import validate_schema_dict
