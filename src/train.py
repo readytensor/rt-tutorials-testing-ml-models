@@ -44,17 +44,25 @@ def run_training(
     Args:
         input_schema_dir (str, optional): The directory path of the input schema.
         saved_schema_path (str, optional): The path where to save the schema.
-        model_config_file_path (str, optional): The path of the model configuration file.
+        model_config_file_path (str, optional): The path of the model
+            configuration file.
         train_dir (str, optional): The directory path of the train data.
-        pipeline_config_file_path (str, optional): The path of the preprocessing configuration file.
+        pipeline_config_file_path (str, optional): The path of the preprocessing
+            configuration file.
         pipeline_file_path (str, optional): The path where to save the pipeline.
-        target_encoder_file_path (str, optional): The path where to save the target encoder.
-        predictor_file_path (str, optional): The path where to save the predictor model.
-        default_hyperparameters_file_path (str, optional): The path of the default hyperparameters file.
-        run_tuning (bool, optional): Whether to run hyperparameter tuning. Default is False.
-        hpt_specs_file_path (str, optional): The path of the configuration file for hyperparameter tuning.
+        target_encoder_file_path (str, optional): The path where to save the
+            target encoder.
+        predictor_file_path (str, optional): The path where to save the
+            predictor model.
+        default_hyperparameters_file_path (str, optional): The path of the default
+            hyperparameters file.
+        run_tuning (bool, optional): Whether to run hyperparameter tuning.
+            Default is False.
+        hpt_specs_file_path (str, optional): The path of the configuration file for
+            hyperparameter tuning.
         hpt_results_file_path (str, optional): The path where to save the HPT results.
-        explainer_config_file_path (str, optional): The path of the explainer configuration file.
+        explainer_config_file_path (str, optional): The path of the explainer
+            configuration file.
         explainer_file_path (str, optional): The path where to save the explainer.
     Returns:
         None
@@ -169,13 +177,15 @@ def run_training(
 
 
 def parse_arguments() -> argparse.Namespace:
-    """Parse the command line argument that indicates if user wants to run hyperparameter tuning."""
+    """Parse the command line argument that indicates if user wants to run
+    hyperparameter tuning."""
     parser = argparse.ArgumentParser(description="Train a binary classification model.")
     parser.add_argument(
         "-t",
         "--tune",
         action="store_true",
-        help="Run hyperparameter tuning before training the model. If not set, use default hyperparameters.",
+        help="Run hyperparameter tuning before training the model. "
+        + "If not set, use default hyperparameters.",
     )
     return parser.parse_args()
 

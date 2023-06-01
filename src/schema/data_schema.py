@@ -7,13 +7,15 @@ from data_models.schema_validator import validate_schema_dict
 
 class BinaryClassificationSchema:
     """
-    A class for loading and providing access to a binary classification schema. This class allows
-    users to work with a generic schema for binary classification problems, enabling them to
-    create algorithm implementations that are not hardcoded to specific feature names. The class
-    provides methods to retrieve information about the schema, such as the ID field, target field,
-    allowed values for the target field, and details of the features (categorical and numeric).
-    This makes it easier to preprocess and manipulate the input data according to the schema,
-    regardless of the specific dataset used.
+    A class for loading and providing access to a binary classification schema.
+
+    This class allows users to work with a generic schema for binary classification
+    problems, enabling them to create algorithm implementations that are not hardcoded
+    to specific feature names. The class provides methods to retrieve information about
+    the schema, such as the ID field, target field, allowed values for the target
+    field, and details of the features (categorical and numeric). This makes it easier
+    to preprocess and manipulate the input data according to the schema, regardless of
+    the specific dataset used.
     """
 
     def __init__(self, schema_dict: dict) -> None:
@@ -33,8 +35,9 @@ class BinaryClassificationSchema:
         Gets the model category.
 
         Returns:
-            str: The category of the machine learning model (e.g., binary_classification,
-                 multi-class_classification, regression, object_detection, etc.).
+            str: The category of the machine learning model
+                (e.g., binary_classification, multi-class_classification,
+                regression, object_detection, etc.).
         """
         return self.schema["modelCategory"]
 
@@ -83,7 +86,8 @@ class BinaryClassificationSchema:
         Returns the feature names of numeric and categorical data types.
 
         Returns:
-            Tuple[List[str], List[str]]: The list of numeric feature names, and the list of categorical feature names.
+            Tuple[List[str], List[str]]: The list of numeric feature names, and the
+                list of categorical feature names.
         """
         fields = self.schema["features"]
         numeric_features = [f["name"] for f in fields if f["dataType"] == "NUMERIC"]
@@ -182,7 +186,8 @@ class BinaryClassificationSchema:
         Gets the allowed values for the categorical features.
 
         Returns:
-            Dict[str, List[str]]: A dictionary of categorical feature names and their corresponding allowed values.
+            Dict[str, List[str]]: A dictionary of categorical feature names and their
+                corresponding allowed values.
         """
         features = self.schema["features"]
         allowed_values = {}
@@ -201,7 +206,8 @@ class BinaryClassificationSchema:
             feature_name (str): The name of the categorical feature.
 
         Returns:
-            List[str]: The list of allowed values for the specified categorical feature.
+            List[str]: The list of allowed values for the specified
+                categorical feature.
         """
         features = self.schema["features"]
         for feature in features:
@@ -247,7 +253,8 @@ class BinaryClassificationSchema:
                     return field["categories"][0]
                 else:
                     raise ValueError(
-                        f"Invalid data type for Feature '{feature_name}' found in the schema."
+                        "Invalid data type for Feature"
+                        f"'{feature_name}' found in the schema."
                     )
         raise ValueError(f"Feature '{feature_name}' not found in the schema.")
 
@@ -283,15 +290,16 @@ class BinaryClassificationSchema:
         Gets the names of all the fields.
 
         Returns:
-            List[str]: The list of all field names (ID field, target field, and all features).
+            List[str]: The list of all field names (ID field, target field, and
+                all features).
         """
         return [self.id, self.target] + self.features
 
 
 def load_json_data_schema(schema_dir_path: str) -> BinaryClassificationSchema:
     """
-    Load the JSON file schema into a dictionary, validate the schema dict for its correctness,
-    and use the validated schema to instantiate the schema provider.
+    Load the JSON file schema into a dictionary, validate the schema dict for
+    its correctness, and use the validated schema to instantiate the schema provider.
 
     Args:
     - schema_dir_path (str): Path from where to read the schema json file.

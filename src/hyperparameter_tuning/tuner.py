@@ -17,7 +17,8 @@ class SKOHyperparameterTuner:
         default_hps (Dict[str, Any]): Dictionary of default hyperparameter values.
         hpt_specs (Dict[str, Any]): Dictionary of hyperparameter tuning specs.
         hpt_results_file_path (str): Path to the hyperparameter tuning results file.
-        is_minimize (bool, optional): Whether the metric should be minimized. Defaults to True.
+        is_minimize (bool, optional): Whether the metric should be minimized.
+            Defaults to True.
     """
 
     def __init__(
@@ -72,7 +73,8 @@ class SKOHyperparameterTuner:
         """
 
         def objective_func(trial):
-            """Build a model from this hyper parameter permutation and evaluate its performance"""
+            """Build a model from this hyper parameter permutation and evaluate
+            its performance"""
             # convert list of HP values into a dictionary of name:val pairs
             hyperparameters = dict(zip(self.hyperparameter_names, trial))
             # train model
@@ -91,7 +93,8 @@ class SKOHyperparameterTuner:
         """Get the hyperparameter tuning search space.
 
         Returns:
-            List[Union[Categorical, Integer, Real]]: List of hyperparameter space objects.
+            List[Union[Categorical, Integer, Real]]: List of hyperparameter
+                space objects.
         """
         param_grid = []
         space_map = {
@@ -117,8 +120,8 @@ class SKOHyperparameterTuner:
             if space_constructor is None:
                 raise ValueError(
                     f"Error creating Hyper-Param Grid. \
-                    Undefined value type: {hp_obj['type']} or search_type: {hp_obj['search_type']}. \
-                    Verify hpt_config.json file."
+                    Undefined value type: {hp_obj['type']} or search_type: \
+                    {hp_obj['search_type']}. Verify hpt_config.json file."
                 )
 
             if hp_obj["type"] == "categorical":
@@ -164,7 +167,8 @@ class SKOHyperparameterTuner:
             x0=self.default_hyperparameter_vals,
             # the acquisition function
             acq_func="EI",
-            # Number of evaluations of `func` with initialization points before approximating it with base_estimator
+            # Number of evaluations of `func` with initialization points before
+            # approximating it with base_estimator
             n_initial_points=n_initial_points,
             # Number of calls to `func`,
             n_calls=self.num_trials,
@@ -235,10 +239,13 @@ def tune_hyperparameters(
         valid_X (Union[pd.DataFrame, np.ndarray]): Validation data features.
         valid_y (Union[pd.Series, np.ndarray]): Validation data labels.
         hpt_results_file_path (str): Path to the hyperparameter tuning results file.
-        is_minimize (bool, optional): Whether the metric should be minimized. Defaults to True.
-        default_hyperparameters_file_path (str, optional): Path to the json file with default hyperparameter values.
+        is_minimize (bool, optional): Whether the metric should be minimized.
+            Defaults to True.
+        default_hyperparameters_file_path (str, optional): Path to the json file with
+            default hyperparameter values.
             Defaults to the path defined in the paths.py file.
-        hpt_specs_file_path (str, optional): Path to the json file with hyperparameter tuning specs.
+        hpt_specs_file_path (str, optional): Path to the json file with hyperparameter
+            tuning specs.
             Defaults to the path defined in the paths.py file.
 
     Returns:

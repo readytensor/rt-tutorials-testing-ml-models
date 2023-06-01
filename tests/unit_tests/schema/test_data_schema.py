@@ -4,7 +4,9 @@ from src.schema.data_schema import BinaryClassificationSchema
 
 def test_init():
     """
-    Test the initialization of BinaryClassificationSchema class with a valid schema dictionary.
+    Test the initialization of BinaryClassificationSchema class with a valid schema
+    dictionary.
+
     Asserts that the properties of the schema object match the input schema dictionary.
     """
     # Given
@@ -16,7 +18,7 @@ def test_init():
         "inputDataFormat": "CSV",
         "id": {"name": "Test ID"},
         "target": {"name": "Test Target", "classes": ["0", "1"], "nullable": False},
-        "features": [{"name": "Test feature", "dataType": "NUMERIC", "nullable": True}]
+        "features": [{"name": "Test feature", "dataType": "NUMERIC", "nullable": True}],
     }
 
     # When
@@ -41,7 +43,8 @@ def test_get_allowed_values_for_categorical_feature():
     """
     Test the method to get allowed values for a categorical feature.
     Asserts that the allowed values match the input schema dictionary.
-    Also tests for a ValueError when trying to get allowed values for a non-existent feature.
+    Also tests for a ValueError when trying to get allowed values for a non-existent
+    feature.
     """
     # Given
     schema_dict = {
@@ -54,8 +57,13 @@ def test_get_allowed_values_for_categorical_feature():
         "target": {"name": "Test Target", "classes": ["0", "1"]},
         "features": [
             {"name": "Test feature 1", "dataType": "NUMERIC", "nullable": True},
-            {"name": "Test feature 2", "dataType": "CATEGORICAL", "categories": ["A", "B"], "nullable": True}
-        ]
+            {
+                "name": "Test feature 2",
+                "dataType": "CATEGORICAL",
+                "categories": ["A", "B"],
+                "nullable": True,
+            },
+        ],
     }
     schema = BinaryClassificationSchema(schema_dict)
 
@@ -74,7 +82,8 @@ def test_get_example_value_for_numeric_feature():
     """
     Test the method to get an example value for a numeric feature.
     Asserts that the example value matches the input schema dictionary.
-    Also tests for a ValueError when trying to get an example value for a non-existent feature.
+    Also tests for a ValueError when trying to get an example value for a non-existent
+    feature.
     """
     # Given
     schema_dict = {
@@ -86,9 +95,19 @@ def test_get_example_value_for_numeric_feature():
         "id": {"name": "Test ID"},
         "target": {"name": "Test Target", "classes": ["0", "1"]},
         "features": [
-            {"name": "Test feature 1", "dataType": "NUMERIC", "example": 123.45, "nullable": True},
-            {"name": "Test feature 2", "dataType": "CATEGORICAL", "categories": ["A", "B"], "nullable": True}
-        ]
+            {
+                "name": "Test feature 1",
+                "dataType": "NUMERIC",
+                "example": 123.45,
+                "nullable": True,
+            },
+            {
+                "name": "Test feature 2",
+                "dataType": "CATEGORICAL",
+                "categories": ["A", "B"],
+                "nullable": True,
+            },
+        ],
     }
     schema = BinaryClassificationSchema(schema_dict)
 
@@ -107,7 +126,8 @@ def test_get_description_for_id_target_and_features():
     """
     Test the methods to get descriptions for the id, target, and features.
     Asserts that the descriptions match the input schema dictionary.
-    Also tests for a ValueError when trying to get a description for a non-existent feature.
+    Also tests for a ValueError when trying to get a description for a non-existent
+    feature.
     """
     # Given
     schema_dict = {
@@ -117,12 +137,26 @@ def test_get_description_for_id_target_and_features():
         "schemaVersion": 1.0,
         "inputDataFormat": "CSV",
         "id": {"name": "Test ID", "description": "ID field"},
-        "target": {"name": "Test Target", "description": "Target field", "classes": ["0", "1"]},
+        "target": {
+            "name": "Test Target",
+            "description": "Target field",
+            "classes": ["0", "1"],
+        },
         "features": [
-            {"name": "Test feature 1", "dataType": "NUMERIC", "description": "Numeric feature", "nullable": True},
-            {"name": "Test feature 2", "dataType": "CATEGORICAL",
-             "description": "Categorical feature", "categories": ["A", "B"], "nullable": True}
-        ]
+            {
+                "name": "Test feature 1",
+                "dataType": "NUMERIC",
+                "description": "Numeric feature",
+                "nullable": True,
+            },
+            {
+                "name": "Test feature 2",
+                "dataType": "CATEGORICAL",
+                "description": "Categorical feature",
+                "categories": ["A", "B"],
+                "nullable": True,
+            },
+        ],
     }
     schema = BinaryClassificationSchema(schema_dict)
 
@@ -147,7 +181,8 @@ def test_is_feature_nullable():
     """
     Test the method to check if a feature is nullable.
     Asserts that the nullable status matches the input schema dictionary.
-    Also tests for a ValueError when trying to check the nullable status for a non-existent feature.
+    Also tests for a ValueError when trying to check the nullable status for a
+    non-existent feature.
     """
     # Given
     schema_dict = {
@@ -160,8 +195,13 @@ def test_is_feature_nullable():
         "target": {"name": "Test Target", "classes": ["0", "1"], "nullable": False},
         "features": [
             {"name": "Test feature 1", "dataType": "NUMERIC", "nullable": True},
-            {"name": "Test feature 2", "dataType": "CATEGORICAL", "categories": ["A", "B"], "nullable": False}
-        ]
+            {
+                "name": "Test feature 2",
+                "dataType": "CATEGORICAL",
+                "categories": ["A", "B"],
+                "nullable": False,
+            },
+        ],
     }
     schema = BinaryClassificationSchema(schema_dict)
 

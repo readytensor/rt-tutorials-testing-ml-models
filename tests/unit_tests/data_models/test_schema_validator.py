@@ -1,7 +1,12 @@
 import pytest
 from pydantic import ValidationError
 from src.data_models.schema_validator import (
-    ID, Target, DataType, Feature, SchemaModel, validate_schema_dict
+    ID,
+    Target,
+    DataType,
+    Feature,
+    SchemaModel,
+    validate_schema_dict,
 )
 
 
@@ -9,12 +14,13 @@ from src.data_models.schema_validator import (
 def test_valid_id():
     """
     Test the `ID` model with valid data.
-    
+
     Ensures that a valid `ID` object is created without raising an exception.
     """
     valid_id = {"name": "ID", "description": "ID description"}
     id_obj = ID(**valid_id)
     assert id_obj.dict() == valid_id
+
 
 # Tests for Target
 def test_valid_target():
@@ -24,22 +30,28 @@ def test_valid_target():
     Ensures that a valid `Target` object is created without raising an exception.
     """
     valid_target = {
-        "name": "target", "description": "target description",
-        "classes": ["class_0", "class_1"]}
+        "name": "target",
+        "description": "target description",
+        "classes": ["class_0", "class_1"],
+    }
     target_obj = Target(**valid_target)
     assert target_obj.dict() == valid_target
+
 
 def test_invalid_target_classes_length():
     """
     Test the `Target` model with invalid data (length of classes != 2).
-    
+
     Ensures that the model raises an exception for an invalid number of classes.
     """
     invalid_target = {
-        "name": "target", "description": "target description",
-        "classes": ["class_0"]}
+        "name": "target",
+        "description": "target description",
+        "classes": ["class_0"],
+    }
     with pytest.raises(ValueError):
         Target(**invalid_target)
+
 
 def test_invalid_target_classes_unique():
     """
@@ -48,10 +60,13 @@ def test_invalid_target_classes_unique():
     Ensures that the model raises an exception for non-unique classes.
     """
     invalid_target = {
-        "name": "target", "description": "target description",
-        "classes": ["class_0", "class_0"]}
+        "name": "target",
+        "description": "target description",
+        "classes": ["class_0", "class_0"],
+    }
     with pytest.raises(ValueError):
         Target(**invalid_target)
+
 
 def test_invalid_target_classes_empty_string():
     """
@@ -60,10 +75,13 @@ def test_invalid_target_classes_empty_string():
     Ensures that the model raises an exception for classes containing an empty string.
     """
     invalid_target = {
-        "name": "target", "description": "target description",
-        "classes": ["class_0", ""]}
+        "name": "target",
+        "description": "target description",
+        "classes": ["class_0", ""],
+    }
     with pytest.raises(ValueError):
         Target(**invalid_target)
+
 
 # Tests for Feature
 def test_valid_numeric_feature():
@@ -75,16 +93,24 @@ def test_valid_numeric_feature():
     are present in the output dictionary and match the input.
 
     Raises:
-        AssertionError: If the created Feature object is not equivalent to the input dictionary.
+        AssertionError: If the created Feature object is not equivalent to the
+            input dictionary.
     """
     valid_feature = {
-        "name": "feature_1", "description": "feature_1 description",
-        "dataType": "NUMERIC", "example": 1.0, "nullable": False}
+        "name": "feature_1",
+        "description": "feature_1 description",
+        "dataType": "NUMERIC",
+        "example": 1.0,
+        "nullable": False,
+    }
     feature_obj = Feature(**valid_feature)
     returned_feature = feature_obj.dict()
-    # Checks if all keys and values of the input dictionary are present in the output dictionary
-    assert all(item in returned_feature.items() for item in valid_feature.items()), \
-        "Some keys or values in the input dictionary are not present in the output dictionary"
+    # Checks if all keys and values of the input dictionary are present in the
+    # output dictionary
+    assert all(
+        item in returned_feature.items() for item in valid_feature.items()
+    ), "Some keys or values in the input dictionary are not present in the \
+        output dictionary"
 
 
 def test_valid_categorical_feature():
@@ -95,27 +121,37 @@ def test_valid_categorical_feature():
     for categorical data.
     """
     valid_feature = {
-        "name": "feature_2", "description": "feature_2 description",
-        "dataType": "CATEGORICAL", "categories": ["category_1", "category_2"],
-        "nullable": False}
+        "name": "feature_2",
+        "description": "feature_2 description",
+        "dataType": "CATEGORICAL",
+        "categories": ["category_1", "category_2"],
+        "nullable": False,
+    }
     feature_obj = Feature(**valid_feature)
     returned_feature = feature_obj.dict()
 
-    # Checks if all keys and values of the input dictionary are present in the output dictionary
-    assert all(item in returned_feature.items() for item in valid_feature.items()), \
-        "Some keys or values in the input dictionary are not present in the output dictionary"
+    # Checks if all keys and values of the input dictionary are present in the
+    # output dictionary
+    assert all(
+        item in returned_feature.items() for item in valid_feature.items()
+    ), "Some keys or values in the input dictionary are not present in the \
+        output dictionary"
+
 
 def test_data_type_enum():
     """
     Tests the DataType enum in the Feature Pydantic model.
 
-    This function creates Feature instances with valid DataType values (NUMERIC and CATEGORICAL) and checks that these
-    values are correctly assigned. It also attempts to create a Feature instance with an invalid DataType value
-    and checks that this raises a ValidationError.
+    This function creates Feature instances with valid DataType values (NUMERIC and
+    CATEGORICAL) and checks that these values are correctly assigned. It also attempts
+    to create a Feature instance with an invalid DataType value and checks that this
+    raises a ValidationError.
 
     Raises:
-        AssertionError: If the assigned DataType value in the Feature instance does not match the expected DataType value.
-        ValidationError: If an invalid DataType value is provided during the creation of the Feature instance.
+        AssertionError: If the assigned DataType value in the Feature instance does not
+            match the expected DataType value.
+        ValidationError: If an invalid DataType value is provided during the creation of
+            the Feature instance.
 
     """
     # Verify that a valid DataType value is accepted
@@ -124,7 +160,7 @@ def test_data_type_enum():
         description="A numeric feature",
         dataType=DataType.NUMERIC,
         nullable=False,
-        example=1.23
+        example=1.23,
     )
     assert feature1.dataType == DataType.NUMERIC
 
@@ -134,7 +170,7 @@ def test_data_type_enum():
         description="A categorical feature",
         dataType=DataType.CATEGORICAL,
         nullable=False,
-        categories=["cat1", "cat2"]
+        categories=["cat1", "cat2"],
     )
     assert feature2.dataType == DataType.CATEGORICAL
 
@@ -145,7 +181,7 @@ def test_data_type_enum():
             description="An invalid feature",
             dataType="INVALID_DATA_TYPE",  # This is not a valid DataType
             nullable=False,
-            example="invalid"
+            example="invalid",
         )
 
 
@@ -156,35 +192,50 @@ def test_invalid_feature_data_type():
     Ensures that the model raises an exception for an invalid data type.
     """
     invalid_feature = {
-        "name": "feature_1", "description": "feature_1 description",
-        "dataType": "INVALID", "example": 1.0, "nullable": False}
+        "name": "feature_1",
+        "description": "feature_1 description",
+        "dataType": "INVALID",
+        "example": 1.0,
+        "nullable": False,
+    }
     with pytest.raises(ValueError):
         Feature(**invalid_feature)
+
 
 def test_missing_example_in_numeric_feature():
     """
     Test the `Feature` model with invalid data (missing example for numeric feature).
 
-    Ensures that the model raises an exception when the example is missing for a 
+    Ensures that the model raises an exception when the example is missing for a
     numeric feature.
     """
     invalid_feature = {
-        "name": "feature_1", "description": "feature_1 description",
-        "dataType": "NUMERIC", "nullable": False}
+        "name": "feature_1",
+        "description": "feature_1 description",
+        "dataType": "NUMERIC",
+        "nullable": False,
+    }
     with pytest.raises(ValueError):
         Feature(**invalid_feature)
+
 
 def test_missing_categories_in_categorical_feature():
     """
-    Test the `Feature` model with invalid data (missing categories for categorical feature).
+    Test the `Feature` model with invalid data (missing categories for categorical
+    feature).
 
-    Ensures that the model raises an exception when the categories are missing for a categorical feature.
+    Ensures that the model raises an exception when the categories are missing for
+    a categorical feature.
     """
     invalid_feature = {
-        "name": "feature_2", "description": "feature_2 description", 
-        "dataType": "CATEGORICAL", "nullable": False}
+        "name": "feature_2",
+        "description": "feature_2 description",
+        "dataType": "CATEGORICAL",
+        "nullable": False,
+    }
     with pytest.raises(ValueError):
         Feature(**invalid_feature)
+
 
 # Tests for SchemaModel
 def test_valid_schema(schema_dict):
@@ -207,12 +258,17 @@ def test_valid_schema(schema_dict):
 
     # Check if the parsed schema object has expected attributes
     for key in schema_dict.keys():
-        assert hasattr(schema_obj, key), f"Parsed schema object does not have '{key}' attribute."
+        assert hasattr(
+            schema_obj, key
+        ), f"Parsed schema object does not have '{key}' attribute."
 
-    assert isinstance(schema_obj.features, list), "Parsed schema object attribute 'features' is not a list."
-    assert len(schema_dict["features"]) == len(schema_obj.features), \
-        "Parsed schema object attribute 'features' does not have the expected length."
-    
+    assert isinstance(
+        schema_obj.features, list
+    ), "Parsed schema object attribute 'features' is not a list."
+    assert len(schema_dict["features"]) == len(
+        schema_obj.features
+    ), "Parsed schema object attribute 'features' does not have the expected length."
+
 
 def test_invalid_schema_model_category(schema_dict):
     """
@@ -225,6 +281,7 @@ def test_invalid_schema_model_category(schema_dict):
     with pytest.raises(ValueError):
         SchemaModel.parse_obj(invalid_schema)
 
+
 def test_invalid_schema_version(schema_dict):
     """
     Test the `SchemaModel` with invalid data (invalid schema version).
@@ -236,6 +293,7 @@ def test_invalid_schema_version(schema_dict):
     with pytest.raises(ValueError):
         SchemaModel.parse_obj(invalid_schema)
 
+
 def test_schema_without_features(schema_dict):
     """
     Test the `SchemaModel` with invalid data (no features defined).
@@ -246,6 +304,7 @@ def test_schema_without_features(schema_dict):
     invalid_schema["features"] = []
     with pytest.raises(ValueError):
         SchemaModel.parse_obj(invalid_schema)
+
 
 # Tests for validate_schema_dict
 def test_validate_schema_dict(schema_dict):
@@ -259,7 +318,8 @@ def test_validate_schema_dict(schema_dict):
         validate_schema_dict(schema_dict)
     except ValueError as e:
         pytest.fail(f"Validation failed with exception: {e}")
-    
+
+
 def test_validate_invalid_schema_dict(schema_dict):
     """
     Test the `validate_schema_dict` function with invalid data.

@@ -37,9 +37,12 @@ def create_instance_model(schema: BinaryClassificationSchema) -> BaseModel:
 
 def get_inference_request_body_model(schema: BinaryClassificationSchema) -> BaseModel:
     """
-    Creates a dynamic Pydantic model for the inference request body validation based on the schema.
-    It ensures that the request body contains a list of instances, each of which is a dictionary representing
-    a data instance with all the required numerical and categorical features as specified in the schema.
+    Creates a dynamic Pydantic model for the inference request body validation based
+    on the schema.
+
+    It ensures that the request body contains a list of instances, each of which is a
+    dictionary representing a data instance with all the required numerical and
+    categorical features as specified in the schema.
 
     Args:
         schema (BinaryClassificationSchema): The binary classification schema.
@@ -51,16 +54,23 @@ def get_inference_request_body_model(schema: BinaryClassificationSchema) -> Base
 
     class InferenceRequestBody(BaseModel):
         """
-        InferenceRequestBody is a Pydantic model for validating the request body of an inference endpoint.
+        InferenceRequestBody is a Pydantic model for validating the request body of an
+            inference endpoint.
+
         The following validations are performed on the request data:
-            - The request body contains a key 'instances' with a list of dictionaries as its value.
+            - The request body contains a key 'instances' with a list of dictionaries
+                as its value.
             - The list is not empty (i.e., at least one instance must be provided).
-            - Each instance contains the ID field whose name is defined in the schema file.
-            - Each instance contains all the required numerical and categorical features as defined in the schema file.
+            - Each instance contains the ID field whose name is defined in the
+                schema file.
+            - Each instance contains all the required numerical and categorical
+                features as defined in the schema file.
             - Values for each feature in each instance are of the correct data type.
-              Values are allowed to be null (i.e., missing) if the feature is specified as nullable in the schema.
+              Values are allowed to be null (i.e., missing) if the feature is specified
+                as nullable in the schema.
               Non-nullable features must have non-null values.
-            - For categorical features, the given value must be one of the categories as defined in the schema file.
+            - For categorical features, the given value must be one of the categories
+                as defined in the schema file.
 
         Attributes:
             instances (List[Instance_Model]): A list of data instances to be validated.
@@ -89,8 +99,8 @@ def get_inference_request_body_model(schema: BinaryClassificationSchema) -> Base
         @validator("instances", pre=True, each_item=True, allow_reuse=True)
         def validate_categorical_features(cls, instance):
             """
-            Validates that the value of a categorical feature is one of the allowed values as
-            defined in the schema file.
+            Validates that the value of a categorical feature is one of the allowed
+            values as defined in the schema file.
             """
             for feature, value in instance.items():
                 if feature in schema.categorical_features:

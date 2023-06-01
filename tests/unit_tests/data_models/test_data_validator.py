@@ -1,16 +1,17 @@
 import pytest
 from typing import Any
 import pandas as pd
-from src.data_models.data_validator import validate_data  
+from src.data_models.data_validator import validate_data
 
 
 def test_validate_data(
-        schema_provider: Any,
-        sample_train_data: pd.DataFrame,
-        sample_test_data: pd.DataFrame):
+    schema_provider: Any,
+    sample_train_data: pd.DataFrame,
+    sample_test_data: pd.DataFrame,
+):
     """
     Tests the `validate_data` function.
-    
+
     It checks the function for several scenarios:
     1. When the input DataFrame (either train or test data) is correctly formatted
         according to the schema, no error should be raised, and the returned DataFrame
@@ -21,8 +22,8 @@ def test_validate_data(
     Args:
         schema_provider (BinaryClassificationSchema): The schema provider instance which
             encapsulates the data schema.
-        sample_train_data (pd.DataFrame): A sample training DataFrame formatted correctly
-            according to the schema.
+        sample_train_data (pd.DataFrame): A sample training DataFrame formatted
+            correctly according to the schema.
         sample_test_data (pd.DataFrame): A sample testing DataFrame formatted correctly
             according to the schema.
 
@@ -35,7 +36,9 @@ def test_validate_data(
         # check if train DataFrame is unchanged
         pd.testing.assert_frame_equal(result_train_data, sample_train_data)
     except AssertionError as exc:
-        pytest.fail(f"Returned DataFrame is not identical to the input DataFrame: {exc}")
+        pytest.fail(
+            f"Returned DataFrame is not identical to the input DataFrame: {exc}"
+        )
 
     # Test with correct data - test data, doesnt have target
     try:
@@ -43,7 +46,9 @@ def test_validate_data(
         # check if test DataFrame is unchanged
         pd.testing.assert_frame_equal(result_test_data, sample_test_data)
     except AssertionError as exc:
-        pytest.fail(f"Returned DataFrame is not identical to the input DataFrame: {exc}")
+        pytest.fail(
+            f"Returned DataFrame is not identical to the input DataFrame: {exc}"
+        )
 
     # Test with incorrect data (missing feature column in train data)
     missing_feature_data = sample_train_data.drop(columns=["numeric_feature_1"])

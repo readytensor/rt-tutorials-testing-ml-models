@@ -1,4 +1,4 @@
-import os 
+import os
 import pytest
 from unittest.mock import patch, MagicMock
 import pprint
@@ -7,7 +7,7 @@ from src.serve_utils import (
     get_model_resources,
     generate_unique_request_id,
     create_predictions_response,
-    combine_predictions_response_with_explanations
+    combine_predictions_response_with_explanations,
 )
 
 
@@ -17,12 +17,16 @@ def resources_paths():
     cur_dir = os.path.dirname(os.path.abspath(__file__))
     test_resources_path = os.path.join(cur_dir, "test_resources")
     return {
-        'saved_schema_path': os.path.join(test_resources_path, 'schema.joblib'),
-        'predictor_file_path': os.path.join(test_resources_path, 'predictor.joblib'),
-        'pipeline_file_path': os.path.join(test_resources_path, 'pipeline.joblib'),
-        'target_encoder_file_path': os.path.join(test_resources_path, 'target_encoder.joblib'),
-        'model_config_file_path': os.path.join(test_resources_path, 'model_config.json'),
-        'explainer_file_path': os.path.join(test_resources_path, 'explainer.joblib')
+        "saved_schema_path": os.path.join(test_resources_path, "schema.joblib"),
+        "predictor_file_path": os.path.join(test_resources_path, "predictor.joblib"),
+        "pipeline_file_path": os.path.join(test_resources_path, "pipeline.joblib"),
+        "target_encoder_file_path": os.path.join(
+            test_resources_path, "target_encoder.joblib"
+        ),
+        "model_config_file_path": os.path.join(
+            test_resources_path, "model_config.json"
+        ),
+        "explainer_file_path": os.path.join(test_resources_path, "explainer.joblib"),
     }
 
 
@@ -32,11 +36,11 @@ def model_resources(resources_paths):
     return get_model_resources(**resources_paths)
 
 
-@patch('serve_utils.uuid.uuid4')
+@patch("serve_utils.uuid.uuid4")
 def test_generate_unique_request_id(mock_uuid):
     """Test the generate_unique_request_id function."""
-    mock_uuid.return_value = MagicMock(hex='1234567890abcdef1234567890abcdef')
-    assert generate_unique_request_id() == '1234567890'
+    mock_uuid.return_value = MagicMock(hex="1234567890abcdef1234567890abcdef")
+    assert generate_unique_request_id() == "1234567890"
 
 
 @pytest.fixture
@@ -53,11 +57,14 @@ def test_create_predictions_response(predictions_df, schema_provider, request_id
     It also checks that the 'predictions' field is a list, each element of which is a
     dictionary with the right keys.
     Additionally, it validates the 'predictedClass' is among the 'targetClasses', and
-    the sum of 'predictedProbabilities' approximates to 1, allowing for a small numerical error.
+    the sum of 'predictedProbabilities' approximates to 1, allowing for a small
+    numerical error.
 
     Args:
-        predictions_df (pd.DataFrame): A fixture providing a DataFrame of model predictions.
-        schema_provider (BinaryClassificationSchema): A fixture providing an instance of the BinaryClassificationSchema.
+        predictions_df (pd.DataFrame): A fixture providing a DataFrame of model
+            predictions.
+        schema_provider (BinaryClassificationSchema): A fixture providing an instance
+            of the BinaryClassificationSchema.
 
     Returns:
         None
@@ -80,10 +87,10 @@ def test_create_predictions_response(predictions_df, schema_provider, request_id
     assert set(response.keys()) == expected_keys
 
     # Check that the 'status' field is 'success'
-    assert response['status'] == 'success'
+    assert response["status"] == "success"
 
     # Check that the 'predictions' field is a list
-    assert isinstance(response['predictions'], list)
+    assert isinstance(response["predictions"], list)
 
     # Check that each prediction has the correct keys
     prediction_keys = {
@@ -91,14 +98,14 @@ def test_create_predictions_response(predictions_df, schema_provider, request_id
         "predictedClass",
         "predictedProbabilities",
     }
-    for prediction in response['predictions']:
+    for prediction in response["predictions"]:
         assert set(prediction.keys()) == prediction_keys
-        
+
         # Check that 'predictedClass' is one of the 'targetClasses'
-        assert prediction['predictedClass'] in response['targetClasses']
-        
+        assert prediction["predictedClass"] in response["targetClasses"]
+
         # Check that 'predictedProbabilities' sum to 1 (within a small tolerance)
-        assert abs(sum(prediction['predictedProbabilities']) - 1.0) < 1e-5
+        assert abs(sum(prediction["predictedProbabilities"]) - 1.0) < 1e-5
 
 
 def test_combine_predictions_response_with_explanations():
@@ -116,7 +123,13 @@ def test_combine_predictions_response_with_explanations():
         "requestId": "...varies...",
         "targetClasses": ["0", "1"],
         "targetDescription": "some description",
-        "predictions": [{"sampleId": "879", "predictedClass": "0", "predictedProbabilities": [0.97548, 0.02452]}]
+        "predictions": [
+            {
+                "sampleId": "879",
+                "predictedClass": "0",
+                "predictedProbabilities": [0.97548, 0.02452],
+            }
+        ],
     }
 
     # Define a sample explanations dictionary
@@ -135,15 +148,17 @@ def test_combine_predictions_response_with_explanations():
                     "Embarked_Q": [0.00657, -0.00657],
                     "Pclass_3": [0.0179, -0.0179],
                     "Pclass_1": [0.02394, -0.02394],
-                    "Sex_male": [0.13747, -0.13747]
-                }
+                    "Sex_male": [0.13747, -0.13747],
+                },
             }
         ],
-        "explanation_method": "shap"
+        "explanation_method": "shap",
     }
 
     # Run the function under test
-    combined = combine_predictions_response_with_explanations(predictions_response, explanations_response)
+    combined = combine_predictions_response_with_explanations(
+        predictions_response, explanations_response
+    )
 
     # Check the resulting dictionary
     expected = predictions_response.copy()

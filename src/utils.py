@@ -52,7 +52,8 @@ def read_json_as_dict(input_path: str) -> Dict:
 
 def read_csv_in_directory(file_dir_path: str) -> pd.DataFrame:
     """
-    Reads a CSV file in the given directory path as a pandas dataframe and returns the dataframe.
+    Reads a CSV file in the given directory path as a pandas dataframe and returns
+    the dataframe.
 
     Args:
     - file_dir_path (str): The path to the directory containing the CSV file.
@@ -62,7 +63,8 @@ def read_csv_in_directory(file_dir_path: str) -> pd.DataFrame:
 
     Raises:
     - FileNotFoundError: If the directory does not exist.
-    - ValueError: If no CSV file is found in the directory or if multiple CSV files are found in the directory.
+    - ValueError: If no CSV file is found in the directory or if multiple CSV files are
+        found in the directory.
     """
     if not os.path.exists(file_dir_path):
         raise FileNotFoundError(f"Directory does not exist: {file_dir_path}")
@@ -104,14 +106,16 @@ def split_train_val(
     data: pd.DataFrame, val_pct: float
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """
-    Splits the input data into training and validation sets based on the given percentage.
+    Splits the input data into training and validation sets based on the
+    given percentage.
 
     Args:
         data (pd.DataFrame): The input data as a DataFrame.
         val_pct (float): The percentage of data to be used for the validation set.
 
     Returns:
-        Tuple[pd.DataFrame, pd.DataFrame]: A tuple containing the training and validation sets as DataFrames.
+        Tuple[pd.DataFrame, pd.DataFrame]: A tuple containing the training and
+            validation sets as DataFrames.
     """
     train_data, val_data = train_test_split(data, test_size=val_pct, random_state=42)
     return train_data, val_data
@@ -143,7 +147,8 @@ def clear_files_in_directory(directory_path: str) -> None:
     Clears all files in the given directory path.
 
     Args:
-    - directory_path (str): The path to the directory containing the files to be cleared.
+    - directory_path (str): The path to the directory containing the files
+        to be cleared.
 
     Returns:
     - None
@@ -175,7 +180,8 @@ def make_serializable(obj: Any) -> Union[int, float, List[Union[int, float]], An
 
     Returns:
     - If obj is an integer or numpy integer, returns the integer value as an int
-    - If obj is a numpy floating-point number, returns the floating-point value as a float
+    - If obj is a numpy floating-point number, returns the floating-point value
+        as a float
     - If obj is a numpy array, returns the array as a list
     - Otherwise, uses the default behavior of the json.JSONEncoder to serialize obj
 

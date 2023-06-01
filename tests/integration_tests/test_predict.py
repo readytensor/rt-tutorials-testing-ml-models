@@ -6,15 +6,16 @@ from train import run_training
 
 
 def test_integration_run_batch_predictions_without_hpt(
-        tmpdir,
-        input_schema_dir,
-        model_config_file_path,
-        train_dir,
-        pipeline_config_file_path,
-        test_dir,
-        sample_test_data,
-        schema_provider,
-        default_hyperparameters_file_path):
+    tmpdir,
+    input_schema_dir,
+    model_config_file_path,
+    train_dir,
+    pipeline_config_file_path,
+    test_dir,
+    sample_test_data,
+    schema_provider,
+    default_hyperparameters_file_path,
+):
     """
     Integration test for the run_batch_predictions function.
 
@@ -30,7 +31,8 @@ def test_integration_run_batch_predictions_without_hpt(
     avoid affecting the actual file system.
 
     Args:
-        tmpdir (LocalPath): Temporary directory path provided by pytest's tmpdir fixture.
+        tmpdir (LocalPath): Temporary directory path provided by pytest's
+            tmpdir fixture.
         input_schema_dir (str): Directory path to the input data schema.
         model_config_file_path (str): Path to the model configuration file.
         train_dir (str): Directory path to the training data.
@@ -43,10 +45,10 @@ def test_integration_run_batch_predictions_without_hpt(
         explainer_config_file_path (str): Path to explainer config file.
     """
     # Create temporary paths for training
-    saved_schema_path = str(tmpdir.join('saved_schema.json'))
-    pipeline_file_path = str(tmpdir.join('pipeline.joblib'))
-    target_encoder_file_path = str(tmpdir.join('target_encoder.joblib'))
-    predictor_file_path = str(tmpdir.join('predictor.joblib'))
+    saved_schema_path = str(tmpdir.join("saved_schema.json"))
+    pipeline_file_path = str(tmpdir.join("pipeline.joblib"))
+    target_encoder_file_path = str(tmpdir.join("target_encoder.joblib"))
+    predictor_file_path = str(tmpdir.join("predictor.joblib"))
 
     # Run the training process without hyperparameter tuning
     run_training(
@@ -58,11 +60,11 @@ def test_integration_run_batch_predictions_without_hpt(
         pipeline_file_path=pipeline_file_path,
         target_encoder_file_path=target_encoder_file_path,
         predictor_file_path=predictor_file_path,
-        default_hyperparameters_file_path=default_hyperparameters_file_path
+        default_hyperparameters_file_path=default_hyperparameters_file_path,
     )
 
     # Create temporary paths for prediction
-    predictions_file_path = str(tmpdir.join('predictions.csv'))
+    predictions_file_path = str(tmpdir.join("predictions.csv"))
 
     # Run the prediction process
     run_batch_predictions(
@@ -72,7 +74,7 @@ def test_integration_run_batch_predictions_without_hpt(
         pipeline_file_path=pipeline_file_path,
         target_encoder_file_path=target_encoder_file_path,
         predictor_file_path=predictor_file_path,
-        predictions_file_path=predictions_file_path
+        predictions_file_path=predictions_file_path,
     )
 
     # Assert that the predictions file is saved in the correct path
@@ -86,5 +88,6 @@ def test_integration_run_batch_predictions_without_hpt(
     for class_ in schema_provider.target_classes:
         assert class_ in predictions_df.columns
 
-    # Assert that the number of rows in the predictions matches the number of rows in the test data
+    # Assert that the number of rows in the predictions matches the number
+    # of rows in the test data
     assert len(predictions_df) == len(sample_test_data)

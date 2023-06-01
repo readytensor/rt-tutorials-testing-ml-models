@@ -5,23 +5,23 @@ from src.train import run_training
 
 @pytest.mark.slow
 def test_run_training(
-        tmpdir, 
-        input_schema_dir, 
-        model_config_file_path,
-        train_dir, 
-        pipeline_config_file_path,
-        default_hyperparameters_file_path,
-        hpt_specs_file_path,
-        explainer_config_file_path
-    ):
+    tmpdir,
+    input_schema_dir,
+    model_config_file_path,
+    train_dir,
+    pipeline_config_file_path,
+    default_hyperparameters_file_path,
+    hpt_specs_file_path,
+    explainer_config_file_path,
+):
     """Test the run_training function to make sure it produces the required artifacts"""
     # Create temporary paths
-    saved_schema_path = str(tmpdir.join('saved_schema.json'))
-    pipeline_file_path = str(tmpdir.join('pipeline.joblib'))
-    target_encoder_file_path = str(tmpdir.join('target_encoder.joblib'))
-    predictor_file_path = str(tmpdir.join('predictor.joblib'))
-    hpt_results_file_path = str(tmpdir.join('hpt_results.csv'))
-    explainer_file_path = str(tmpdir.join('explainer.joblib'))
+    saved_schema_path = str(tmpdir.join("saved_schema.json"))
+    pipeline_file_path = str(tmpdir.join("pipeline.joblib"))
+    target_encoder_file_path = str(tmpdir.join("target_encoder.joblib"))
+    predictor_file_path = str(tmpdir.join("predictor.joblib"))
+    hpt_results_file_path = str(tmpdir.join("hpt_results.csv"))
+    explainer_file_path = str(tmpdir.join("explainer.joblib"))
 
     # Run the training process without tuning
     run_training(
@@ -36,7 +36,7 @@ def test_run_training(
         default_hyperparameters_file_path=default_hyperparameters_file_path,
         run_tuning=False,
         explainer_config_file_path=explainer_config_file_path,
-        explainer_file_path=explainer_file_path
+        explainer_file_path=explainer_file_path,
     )
 
     # Assert that the model artifacts are saved in the correct paths
@@ -61,7 +61,7 @@ def test_run_training(
         hpt_specs_file_path=hpt_specs_file_path,
         hpt_results_file_path=hpt_results_file_path,
         explainer_config_file_path=explainer_config_file_path,
-        explainer_file_path=explainer_file_path
+        explainer_file_path=explainer_file_path,
     )
 
     # Assert that the model artifacts are saved in the correct paths

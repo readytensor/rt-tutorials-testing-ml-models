@@ -13,7 +13,8 @@ warnings.filterwarnings("ignore")
 class Classifier:
     """A wrapper class for the Random Forest binary classifier.
 
-    This class provides a consistent interface that can be used with other classifier models.
+    This class provides a consistent interface that can be used with other
+    classifier models.
     The Random Forest binary classifier is encapsulated inside this class.
     """
 
@@ -29,11 +30,14 @@ class Classifier:
         """Construct a new Random Forest binary classifier.
 
         Args:
-            n_estimators (int, optional): The number of trees in the forest. Defaults to 100.
-            min_samples_split (int, optional): The minimum number of samples required to split an internal node.
-                                               Defaults to 2.
-            min_samples_leaf (int, optional): The minimum number of samples required to be at a leaf node.
-                                              Defaults to 1.
+            n_estimators (int, optional): The number of trees in the forest.
+                Defaults to 100.
+            min_samples_split (int, optional): The minimum number of samples required
+                to split an internal node.
+                Defaults to 2.
+            min_samples_leaf (int, optional): The minimum number of samples required
+                to be at a leaf node.
+                Defaults to 1.
         """
         self.n_estimators = int(n_estimators)
         self.min_samples_split = int(min_samples_split)
@@ -96,7 +100,8 @@ class Classifier:
         """Save the Random Forest binary classifier to disk.
 
         Args:
-            model_file_path (str): The full file path (dir + file name) to which to save the model.
+            model_file_path (str): The full file path (dir + file name) to which
+                to save the model.
         """
         joblib.dump(self, model_file_path)
 
@@ -149,7 +154,8 @@ def predict_with_model(
     Args:
         classifier (Classifier): The classifier model.
         data (pd.DataFrame): The input data.
-        return_probs (bool): Whether to return class probabilities or labels. Defaults to True.
+        return_probs (bool): Whether to return class probabilities or labels.
+            Defaults to True.
 
     Returns:
         np.ndarray: The predicted classes or class probabilities.
@@ -165,7 +171,8 @@ def save_predictor_model(model: Classifier, model_file_path: str) -> None:
 
     Args:
         model (Classifier): The classifier model to save.
-        model_file_path (str): The full file path (dir + file name) to which to save the model.
+        model_file_path (str): The full file path (dir + file name) to which to
+            save the model.
     """
     model.save(model_file_path)
 

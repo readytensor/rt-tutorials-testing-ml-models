@@ -11,8 +11,8 @@ from src.utils import (
     read_csv_in_directory,
     set_seeds,
     split_train_val,
-    save_dataframe_as_csv)
-
+    save_dataframe_as_csv,
+)
 
 
 def test_read_json_as_dict_with_file_path():
@@ -24,8 +24,8 @@ def test_read_json_as_dict_with_file_path():
     input_dict = {"key": "value"}
     temp_dir = tempfile.mkdtemp()
     temp_file_path = os.path.join(temp_dir, "test.json")
-    
-    with open(temp_file_path, 'w', encoding='utf-8') as temp_file:
+
+    with open(temp_file_path, "w", encoding="utf-8") as temp_file:
         json.dump(input_dict, temp_file)
 
     # When
@@ -47,8 +47,8 @@ def test_read_json_as_dict_with_dir_path():
     input_dict = {"key": "value"}
     temp_dir = tempfile.mkdtemp()
     temp_file_path = os.path.join(temp_dir, "test.json")
-    
-    with open(temp_file_path, 'w', encoding='utf-8') as temp_file:
+
+    with open(temp_file_path, "w", encoding="utf-8") as temp_file:
         json.dump(input_dict, temp_file)
 
     # When
@@ -63,7 +63,8 @@ def test_read_json_as_dict_with_dir_path():
 
 def test_read_json_as_dict_with_invalid_path():
     """
-    Test if `read_json_as_dict` function correctly raises a ValueError when given an invalid path.
+    Test if `read_json_as_dict` function correctly raises a ValueError when given
+    an invalid path.
     """
     # Given
     invalid_path = "/invalid/path"
@@ -75,12 +76,12 @@ def test_read_json_as_dict_with_invalid_path():
 
 def test_read_json_as_dict_no_json_file(tmpdir):
     """
-    Test the read_json_as_dict function for a directory that does not contain any JSON file.
-    The function should raise an exception.
+    Test the read_json_as_dict function for a directory that does not contain any
+    JSON file. The function should raise an exception.
     """
     # Given: A temporary directory without any JSON file
     directory_path = tmpdir.mkdir("subdir")
-    
+
     # When: read_json_as_dict is called with the directory path
     # Then: A ValueError should be raised
     with pytest.raises(ValueError):
@@ -106,7 +107,7 @@ def test_read_csv_in_directory(tmpdir):
     """
     # Valid case: Create a CSV file in a temporary directory
     file_path = tmpdir.mkdir("sub").join("test.csv")
-    df_test = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})
+    df_test = pd.DataFrame({"A": [1, 2, 3], "B": [4, 5, 6]})
     df_test.to_csv(file_path, index=False)
     df_read = read_csv_in_directory(str(tmpdir.join("sub")))
     pd.testing.assert_frame_equal(df_read, df_test)
@@ -135,7 +136,7 @@ def test_split_train_val():
     Test the function split_train_val with valid inputs.
     Ensures that the training and validation sets are split correctly.
     """
-    df = pd.DataFrame(np.random.randint(0, 100, size=(100, 4)), columns=list('ABCD'))
+    df = pd.DataFrame(np.random.randint(0, 100, size=(100, 4)), columns=list("ABCD"))
     train_data, val_data = split_train_val(df, 0.2)
 
     # Verify that the total number of rows equals the original number of rows
@@ -144,7 +145,8 @@ def test_split_train_val():
     # Verify that the percentage split is correct
     assert len(val_data) / len(df) == pytest.approx(0.2, 0.01)
 
-    # Verify that all the original columns are present in the training and validation sets
+    # Verify that all the original columns are present in the training and
+    # validation sets
     assert list(df.columns) == list(train_data.columns)
     assert list(df.columns) == list(val_data.columns)
 
@@ -158,7 +160,7 @@ def test_set_seeds():
         set_seeds(42)
         data = pd.DataFrame(np.random.randn(10, 5))
         train_data_1, val_data_1 = split_train_val(data, 0.2)
-        
+
         set_seeds(42)
         data = pd.DataFrame(np.random.randn(10, 5))
         train_data_2, val_data_2 = split_train_val(data, 0.2)
@@ -177,19 +179,21 @@ def test_set_seeds():
 
 def test_save_dataframe_as_csv():
     """
-    Test that the 'save_dataframe_as_csv' function correctly saves a DataFrame to disk as a CSV file,
-    with the correct formatting for float values.
+    Test that the 'save_dataframe_as_csv' function correctly saves a DataFrame
+    to disk as a CSV file, with the correct formatting for float values.
     """
     # Create a sample DataFrame
-    df = pd.DataFrame({
-        'A': [1, 2, 3],
-        'B': [4.123456, 5.123456, 6.123456],
-        'C': ['foo', 'bar', 'baz']
-    })
+    df = pd.DataFrame(
+        {
+            "A": [1, 2, 3],
+            "B": [4.123456, 5.123456, 6.123456],
+            "C": ["foo", "bar", "baz"],
+        }
+    )
 
     # Create a temporary file path
     tmpdir = tempfile.mkdtemp()
-    file_path = os.path.join(tmpdir, 'test.csv')
+    file_path = os.path.join(tmpdir, "test.csv")
 
     # Save the DataFrame to CSV
     save_dataframe_as_csv(df, file_path)
@@ -201,4 +205,4 @@ def test_save_dataframe_as_csv():
     pd.testing.assert_frame_equal(df, df_loaded, atol=1e-4)
 
     # Check that float values are saved with correct precision
-    assert df_loaded['B'].apply(lambda x: len(str(x).split('.')[1])).max() <= 4
+    assert df_loaded["B"].apply(lambda x: len(str(x).split(".")[1])).max() <= 4

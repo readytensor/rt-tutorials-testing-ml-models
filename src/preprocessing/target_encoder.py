@@ -49,8 +49,9 @@ class CustomTargetEncoder(BaseEstimator, TransformerMixin):
             observed_classes = set(targets)
             if len(observed_classes) != 2:
                 raise ValueError(
-                    f"Expected two classes {self.classes_}."
-                    f"Found {len(observed_classes)} class in given target classes: {list(observed_classes)}"
+                    f"Expected two classes {self.classes_}. Found \
+                        {len(observed_classes)} class in given target classes: \
+                             {list(observed_classes)}"
                 )
             if len(observed_classes.intersection(self.classes_)) != 2:
                 raise ValueError(

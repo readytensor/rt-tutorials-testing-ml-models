@@ -25,15 +25,18 @@ class Target(BaseModel):
     def target_classes_are_two_and_unique_and_not_empty_str(cls, target_classes):
         if len(target_classes) != 2:
             raise ValueError(
-                f"Target classes must be a list with two labels. Given `{target_classes}`"
+                f"Target classes must be a list with two labels."
+                f"Given `{target_classes}`"
             )
         if len(set(target_classes)) != 2:
             raise ValueError(
-                f"Target classes must be a list with two unique labels. Given `{target_classes}`"
+                "Target classes must be a list with two unique labels. "
+                f"Given `{target_classes}`"
             )
         if "" in target_classes:
             raise ValueError(
-                f"Target classes must not contain empty strings. Given `{target_classes}`"
+                "Target classes must not contain empty strings. "
+                f"Given `{target_classes}`"
             )
         return target_classes
 
@@ -63,8 +66,8 @@ class Feature(BaseModel):
         data_type = values.get("dataType")
         if data_type == "NUMERIC" and v is None:
             raise ValueError(
-                f"`example` must be present and a float or an integer when dataType is NUMERIC."
-                f"Check field: {values}"
+                f"`example` must be present and a float or an integer "
+                f"when dataType is NUMERIC. Check field: {values}"
             )
         return v
 
@@ -73,7 +76,8 @@ class Feature(BaseModel):
         data_type = values.get("dataType")
         if data_type == "CATEGORICAL" and v is None:
             raise ValueError(
-                f"`categories` must be present when dataType is CATEGORICAL. Check field: {values}"
+                "`categories` must be present when dataType is CATEGORICAL. "
+                f"Check field: {values}"
             )
         return v
 

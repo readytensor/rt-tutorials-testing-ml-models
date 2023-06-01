@@ -32,7 +32,8 @@ def log_error(message: str, error: Exception, error_fpath: str) -> None:
     Args:
         message (str): The error message.
         error (Exception): The exception instance.
-        error_fpath (str, optional): The file path to write the error message to. Defaults to None.
+        error_fpath (str, optional): The file path to write the error message to.
+            Defaults to None.
     """
     with open(error_fpath, "w", encoding="utf-8") as file:
         err_msg = f"{message} Error: {str(error)}"

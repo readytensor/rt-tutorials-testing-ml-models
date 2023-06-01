@@ -1,4 +1,3 @@
-import os
 import logging
 from typing import Any
 from src.logger import get_logger, log_error, close_handlers
@@ -66,7 +65,7 @@ def test_log_error(tmpdir: Any) -> None:
         log_error(message, error, str(error_file_path))
 
     # Then
-    with open(error_file_path, 'r', encoding="utf-8") as file:
+    with open(error_file_path, "r", encoding="utf-8") as file:
         error_msg = file.read()
 
     assert message in error_msg

@@ -102,7 +102,8 @@ async def transform_req_data_and_make_predictions(
         request_id (str): Unique request id for logging and tracking
 
     Returns:
-        Tuple[pd.DataFrame, dict]: Tuple containing transformed data and prediction response.
+        Tuple[pd.DataFrame, dict]: Tuple containing transformed data and
+            prediction response.
     """
     data = pd.DataFrame.from_records(request.dict()["instances"])
     logger.info(f"Predictions requested for {len(data)} samples...")

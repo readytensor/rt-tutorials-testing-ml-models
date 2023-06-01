@@ -2,9 +2,10 @@ import pytest
 from pydantic import ValidationError
 from data_models.infer_request_model import (
     create_instance_model,
-    get_inference_request_body_model
+    get_inference_request_body_model,
 )
 from src.schema.data_schema import BinaryClassificationSchema
+
 
 @pytest.fixture
 def schema_dict():
@@ -15,15 +16,12 @@ def schema_dict():
         "modelCategory": "binary_classification",
         "schemaVersion": 1.0,
         "inputDataFormat": "CSV",
-        "id": {
-            "name": "id",
-            "description": "unique identifier."
-        },
+        "id": {"name": "id", "description": "unique identifier."},
         "target": {
             "name": "target_field",
-            "description":  "some target desc.",
-            "classes" :     ["A", "B"],
-            "positiveClass": "A"
+            "description": "some target desc.",
+            "classes": ["A", "B"],
+            "positiveClass": "A",
         },
         "features": [
             {
@@ -31,57 +29,54 @@ def schema_dict():
                 "description": "some desc.",
                 "dataType": "NUMERIC",
                 "example": 50,
-                "nullable": True
+                "nullable": True,
             },
             {
                 "name": "numeric_feature_2",
                 "description": "some desc.",
                 "dataType": "NUMERIC",
                 "example": 0.5,
-                "nullable": False
+                "nullable": False,
             },
             {
                 "name": "categorical_feature_1",
                 "description": "some desc.",
                 "dataType": "CATEGORICAL",
                 "categories": ["A", "B", "C"],
-                "nullable": True
+                "nullable": True,
             },
             {
                 "name": "categorical_feature_2",
                 "description": "some desc.",
                 "dataType": "CATEGORICAL",
                 "categories": ["P", "Q", "R", "S", "T"],
-                "nullable": False
-            }
-        ]
+                "nullable": False,
+            },
+        ],
     }
     return valid_schema
 
 
 @pytest.fixture
 def schema_provider(schema_dict):
-    """ Fixture to create a sample schema for testing"""
+    """Fixture to create a sample schema for testing"""
     return BinaryClassificationSchema(schema_dict)
 
 
 @pytest.fixture
 def sample_request_data(sample_instance_data):
     # Define a fixture for test data
-    return {
-        "instances": [
-            sample_instance_data
-        ]
-    }
+    return {"instances": [sample_instance_data]}
+
 
 def test_can_create_instance_model(schema_provider):
     """
     Test creation of the instance model with valid schema provider.
 
     Ensures that a valid instance model is created without raising an exception.
-    """    
+    """
     try:
-       _ = create_instance_model(schema_provider)
+        _ = create_instance_model(schema_provider)
     except Exception as e:
         pytest.fail(f"Instance model creation failed with exception: {e}")
 
@@ -98,26 +93,30 @@ def test_valid_instance(SampleInstanceModel):
     """
     # valid instance
     try:
-        _ = SampleInstanceModel.parse_obj({
-            "id": "1232",
-            "numeric_feature_1": 50,
-            "numeric_feature_2": 0.5,
-            "categorical_feature_1": "A",
-            "categorical_feature_2": "P",
-        })
+        _ = SampleInstanceModel.parse_obj(
+            {
+                "id": "1232",
+                "numeric_feature_1": 50,
+                "numeric_feature_2": 0.5,
+                "categorical_feature_1": "A",
+                "categorical_feature_2": "P",
+            }
+        )
     except Exception as e:
         pytest.fail(f"Instance parsing failed with exception: {e}")
 
     # valid instance with extra feature (still valid)
     try:
-        returned = SampleInstanceModel.parse_obj({
-            "id": "1232",
-            "numeric_feature_1": 50,
-            "numeric_feature_2": 0.5,
-            "categorical_feature_1": "A",
-            "categorical_feature_2": "P",
-            "extra_feature": 0.5,
-        })
+        _ = SampleInstanceModel.parse_obj(
+            {
+                "id": "1232",
+                "numeric_feature_1": 50,
+                "numeric_feature_2": 0.5,
+                "categorical_feature_1": "A",
+                "categorical_feature_2": "P",
+                "extra_feature": 0.5,
+            }
+        )
     except Exception as e:
         pytest.fail(f"Instance parsing failed with exception: {e}")
 
@@ -134,57 +133,63 @@ def test_invalid_instance(SampleInstanceModel):
 
     # missing feature_1
     with pytest.raises(ValidationError):
-        _ = SampleInstanceModel.parse_obj({
-            "id": "1232",
-            "numeric_feature_2": 0.5,
-            "categorical_feature_1": "A",
-            "categorical_feature_2": "P",
-        })
+        _ = SampleInstanceModel.parse_obj(
+            {
+                "id": "1232",
+                "numeric_feature_2": 0.5,
+                "categorical_feature_1": "A",
+                "categorical_feature_2": "P",
+            }
+        )
 
     # missing all features
     with pytest.raises(ValidationError):
-        _ = SampleInstanceModel.parse_obj({
-            "id": "1232"
-        })
+        _ = SampleInstanceModel.parse_obj({"id": "1232"})
 
     # missing id
     with pytest.raises(ValidationError):
-        _ = SampleInstanceModel.parse_obj({
-            "numeric_feature_1": 50,
-            "numeric_feature_2": 0.5,
-            "categorical_feature_1": "A",
-            "categorical_feature_2": "P",
-        })
+        _ = SampleInstanceModel.parse_obj(
+            {
+                "numeric_feature_1": 50,
+                "numeric_feature_2": 0.5,
+                "categorical_feature_1": "A",
+                "categorical_feature_2": "P",
+            }
+        )
 
     # id is None
     with pytest.raises(ValidationError):
-        _ = SampleInstanceModel.parse_obj({
-            "id": None,
-            "numeric_feature_1": 50,
-            "numeric_feature_2": 0.5,
-            "categorical_feature_1": "A",
-            "categorical_feature_2": "P",
-        })
+        _ = SampleInstanceModel.parse_obj(
+            {
+                "id": None,
+                "numeric_feature_1": 50,
+                "numeric_feature_2": 0.5,
+                "categorical_feature_1": "A",
+                "categorical_feature_2": "P",
+            }
+        )
 
     # missing id and feature
     with pytest.raises(ValidationError):
-        _ = SampleInstanceModel.parse_obj({
-            "numeric_feature_2": 0.5,
-            "categorical_feature_1": "A",
-            "categorical_feature_2": "P",
-        })
-        
+        _ = SampleInstanceModel.parse_obj(
+            {
+                "numeric_feature_2": 0.5,
+                "categorical_feature_1": "A",
+                "categorical_feature_2": "P",
+            }
+        )
+
     # wrong data type for numeric_feature_1
     with pytest.raises(ValidationError):
-        _ = SampleInstanceModel.parse_obj({
-            "id": "1232",
-            "numeric_feature_1": "invalid",
-            "numeric_feature_2": 0.5,
-            "categorical_feature_1": "A",
-            "categorical_feature_2": "P",
-        })
-    
-    
+        _ = SampleInstanceModel.parse_obj(
+            {
+                "id": "1232",
+                "numeric_feature_1": "invalid",
+                "numeric_feature_2": 0.5,
+                "categorical_feature_1": "A",
+                "categorical_feature_2": "P",
+            }
+        )
 
 
 def test_get_inference_request_body_model(schema_provider):
@@ -194,7 +199,7 @@ def test_get_inference_request_body_model(schema_provider):
     Ensures that a valid instance model is created without raising an exception.
     """
     try:
-       _ = get_inference_request_body_model(schema_provider)
+        _ = get_inference_request_body_model(schema_provider)
     except Exception as e:
         pytest.fail(f"Request Body model creation failed with exception: {e}")
 
@@ -214,59 +219,65 @@ def test_valid_inference_request_body(SampleRequestBodyModel):
     # valid request with single instance
     try:
         # valid request body
-        _ = SampleRequestBodyModel.parse_obj({
-            "instances": [
-                {
-                    "id": "1232",
-                    "numeric_feature_1": 50,
-                    "numeric_feature_2": 0.5,
-                    "categorical_feature_1": "A",
-                    "categorical_feature_2": "P",
-                }
-            ]
-        })
+        _ = SampleRequestBodyModel.parse_obj(
+            {
+                "instances": [
+                    {
+                        "id": "1232",
+                        "numeric_feature_1": 50,
+                        "numeric_feature_2": 0.5,
+                        "categorical_feature_1": "A",
+                        "categorical_feature_2": "P",
+                    }
+                ]
+            }
+        )
     except Exception as e:
         pytest.fail(f"Inference request body parsing failed with exception: {e}")
 
     # valid request with multiple instances
     try:
         # valid request body
-        _ = SampleRequestBodyModel.parse_obj({
-            "instances": [
-                {
-                    "id": "123",
-                    "numeric_feature_1": 50,
-                    "numeric_feature_2": 0.5,
-                    "categorical_feature_1": "A",
-                    "categorical_feature_2": "P",
-                },
-                {
-                    "id": "456",
-                    "numeric_feature_1": 60,
-                    "numeric_feature_2": 1.5,
-                    "categorical_feature_1": "B",
-                    "categorical_feature_2": "Q",
-                }
-            ]
-        })
+        _ = SampleRequestBodyModel.parse_obj(
+            {
+                "instances": [
+                    {
+                        "id": "123",
+                        "numeric_feature_1": 50,
+                        "numeric_feature_2": 0.5,
+                        "categorical_feature_1": "A",
+                        "categorical_feature_2": "P",
+                    },
+                    {
+                        "id": "456",
+                        "numeric_feature_1": 60,
+                        "numeric_feature_2": 1.5,
+                        "categorical_feature_1": "B",
+                        "categorical_feature_2": "Q",
+                    },
+                ]
+            }
+        )
     except Exception as e:
         pytest.fail(f"Inference request body parsing failed with exception: {e}")
 
     # valid request - extra key
     try:
         # valid request body
-        _ = SampleRequestBodyModel.parse_obj({
-            "instances": [
-                {
-                    "id": "1232",
-                    "numeric_feature_1": 50,
-                    "numeric_feature_2": 0.5,
-                    "categorical_feature_1": "A",
-                    "categorical_feature_2": "P",
-                }
-            ], 
-            "extra": "key"
-        })
+        _ = SampleRequestBodyModel.parse_obj(
+            {
+                "instances": [
+                    {
+                        "id": "1232",
+                        "numeric_feature_1": 50,
+                        "numeric_feature_2": 0.5,
+                        "categorical_feature_1": "A",
+                        "categorical_feature_2": "P",
+                    }
+                ],
+                "extra": "key",
+            }
+        )
     except Exception as e:
         pytest.fail(f"Inference request body parsing failed with exception: {e}")
 
@@ -281,7 +292,7 @@ def test_invalid_inference_request_body(SampleRequestBodyModel):
 
     Ensures that request body model validation raises an exception.
     """
-    # request is empty 
+    # request is empty
     with pytest.raises(ValidationError):
         _ = SampleRequestBodyModel.parse_obj({})
 
@@ -295,33 +306,37 @@ def test_invalid_inference_request_body(SampleRequestBodyModel):
 
     # 'instances' has sample instance with missing feature
     with pytest.raises(ValidationError):
-        _ = SampleRequestBodyModel.parse_obj({
-            "instances": [
-                {
-                    "id": "1232",
-                    "numeric_feature_2": 0.5,
-                    "categorical_feature_1": "A",
-                    "categorical_feature_2": "P",
-                }
-            ]
-        })
+        _ = SampleRequestBodyModel.parse_obj(
+            {
+                "instances": [
+                    {
+                        "id": "1232",
+                        "numeric_feature_2": 0.5,
+                        "categorical_feature_1": "A",
+                        "categorical_feature_2": "P",
+                    }
+                ]
+            }
+        )
 
     # 'instances' has valid and invalid sample
     with pytest.raises(ValidationError):
-        _ = SampleRequestBodyModel.parse_obj({
-            "instances": [
-                {
-                    "id": "123",
-                    "numeric_feature_1": 50,
-                    "numeric_feature_2": 0.5,
-                    "categorical_feature_1": "A",
-                    "categorical_feature_2": "P",
-                },
-                {
-                    "id": "456",
-                    "numeric_feature_1": 60,
-                    "categorical_feature_1": "B",
-                    "categorical_feature_2": "Q",
-                }
-            ]
-        })
+        _ = SampleRequestBodyModel.parse_obj(
+            {
+                "instances": [
+                    {
+                        "id": "123",
+                        "numeric_feature_1": 50,
+                        "numeric_feature_2": 0.5,
+                        "categorical_feature_1": "A",
+                        "categorical_feature_2": "P",
+                    },
+                    {
+                        "id": "456",
+                        "numeric_feature_1": 60,
+                        "categorical_feature_1": "B",
+                        "categorical_feature_2": "Q",
+                    },
+                ]
+            }
+        )

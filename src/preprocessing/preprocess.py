@@ -59,7 +59,8 @@ def transform_data(
         data (pd.DataFrame): The input data as a DataFrame (targets may be included).
 
     Returns:
-        Tuple[pd.DataFrame, Union[pd.Series, None]]: A tuple containing the transformed data and transformed targets;
+        Tuple[pd.DataFrame, Union[pd.Series, None]]: A tuple containing the transformed
+            data and transformed targets;
             transformed targets are None if the data does not contain targets.
     """
     transformed_inputs = transform_inputs(preprocess_pipeline, data)
@@ -100,7 +101,8 @@ def load_pipeline_and_target_encoder(
         target_encoder_fpath (str): full path where the target encoder is saved
 
     Returns:
-        Tuple[pd.DataFrame, pd.DataFrame]: A tuple containing the preprocessing pipeline and target encoder.
+        Tuple[pd.DataFrame, pd.DataFrame]: A tuple containing the preprocessing
+            pipeline and target encoder.
     """
     preprocess_pipeline = load_pipeline(file_path_and_name=pipeline_fpath)
     target_encoder = load_target_encoder(file_path_and_name=target_encoder_fpath)
@@ -119,7 +121,8 @@ def handle_class_imbalance(
         random_state (int): The random state seed for reproducibility. Defaults to 0.
 
     Returns:
-        Tuple[pd.DataFrame, pd.Series]: A tuple containing the balanced data and balanced labels.
+        Tuple[pd.DataFrame, pd.Series]: A tuple containing the balanced data and
+            balanced labels.
     """
     # Adjust k_neighbors parameter for SMOTE
     # set k_neighbors to be the smaller of two values:

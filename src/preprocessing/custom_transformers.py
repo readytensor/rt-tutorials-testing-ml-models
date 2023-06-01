@@ -87,14 +87,16 @@ class DropAllNaNFeatures(BaseEstimator, TransformerMixin):
             X = X.drop(columns=self.nan_columns_to_drop, errors="ignore")
             if X.empty:
                 raise ValueError(
-                    "All features in the input dataframe are NaN. Dropping all yields empty dataframe"
+                    "All features in the input dataframe are NaN. \
+                    Dropping all yields empty dataframe"
                 )
         return X
 
 
 class TypeCaster(BaseEstimator, TransformerMixin):
     """
-    A custom transformer that casts the specified variables in the input data to a specified data type.
+    A custom transformer that casts the specified variables in the input data
+    to a specified data type.
     """
 
     def __init__(self, vars: List[str], cast_type: str):
@@ -150,8 +152,8 @@ class TransformerWrapper(BaseEstimator, TransformerMixin):
         **kwargs,
     ):
         """
-        Wrapper class that fits/transforms using given transformer if given variables are
-        present in data, else returns the data as-is.
+        Wrapper class that fits/transforms using given transformer if given variables
+        are present in data, else returns the data as-is.
 
         Args:
             transformer : transformer class
@@ -159,7 +161,8 @@ class TransformerWrapper(BaseEstimator, TransformerMixin):
             variables : list of str
                 List of the features to transform.
             **kwargs : any
-                Additional key-value pairs for arguments accepted by the given transformer
+                Additional key-value pairs for arguments accepted by the given
+                transformer
 
         """
         self.transformer = transformer
@@ -190,7 +193,8 @@ class TransformerWrapper(BaseEstimator, TransformerMixin):
             X: pandas DataFrame - The data to transform.
             y: unused
         Returns:
-            pandas DataFrame - The transformed data with the fitted categorical features.
+            pandas DataFrame - The transformed data with the fitted
+                categoricalfeatures.
         """
         if len(self.fitted_vars) == 0:
             return X
@@ -225,9 +229,11 @@ class ValueClipper(BaseEstimator, TransformerMixin):
             fields_to_clip : list of str
                 List of field names to clip.
             min_val : float or None, optional (default=None)
-                Minimum value of the range. If None, the values are not clipped from the lower end.
+                Minimum value of the range.
+                If None, the values are not clipped from the lower end.
             max_val : float or None, optional (default=None)
-                Maximum value of the range. If None, the values are not clipped from the upper end.
+                Maximum value of the range.
+                If None, the values are not clipped from the upper end.
 
         """
         super().__init__()
@@ -267,8 +273,10 @@ class ValueClipper(BaseEstimator, TransformerMixin):
 
 
 class MostFrequentImputer(BaseEstimator, TransformerMixin):
-    """Imputes missing values using the most frequently observed class for categorical features
-    when missing values are rare (under 10% of samples)."""
+    """
+    Imputes missing values using the most frequently observed class for
+    categorical features when missing values are rare (under 10% of samples).
+    """
 
     def __init__(self, cat_vars: List[str], threshold: float):
         """
@@ -278,8 +286,8 @@ class MostFrequentImputer(BaseEstimator, TransformerMixin):
             cat_vars : list of str
                 List of the categorical features to impute.
             threshold : float, optional (default=1)
-                The minimum proportion of the samples that must contain a missing value for the
-                imputation to be performed.
+                The minimum proportion of the samples that must contain a missing value
+                for the imputation to be performed.
 
         """
         self.cat_vars = cat_vars
@@ -310,15 +318,16 @@ class MostFrequentImputer(BaseEstimator, TransformerMixin):
 
     def transform(self, X: pd.DataFrame, y=None):
         """
-        Transform the data by imputing the most frequent class for the fitted categorical features.
+        Transform the data by imputing the most frequent class for the fitted
+        categorical features.
 
         Args:
             X: pandas DataFrame
                 The data to transform.
             y: unused
         Returns:
-            pandas DataFrame - The transformed data with the most frequent class imputed for the
-                               fitted categorical features.
+            pandas DataFrame - The transformed data with the most frequent class
+                imputed for the fitted categorical features.
         """
         for col in self.fill_vals:
             if col in X.columns:
@@ -340,7 +349,8 @@ class OneHotEncoderMultipleCols(BaseEstimator, TransformerMixin):
 
         Args:
             ohe_columns (list[str]): List of the categorical features to one-hot encode.
-            max_num_categories (int, optional): Maximum number of categories to include for each feature.
+            max_num_categories (int, optional): Maximum number of categories to include
+                for each feature.
             drop_original(bool, optional): Flag to drop or keep the original OHE columns
         """
         super().__init__()
@@ -365,7 +375,8 @@ class OneHotEncoderMultipleCols(BaseEstimator, TransformerMixin):
         self.fitted_vars = list(set(self.ohe_columns).intersection(X.columns))
         for col in self.fitted_vars:
             top_categories = X[col].value_counts().sort_values(ascending=False).index
-            # we will drop the redundant last category, and also cap to max_num_categories
+            # we will drop the redundant last category, and also cap
+            # to max_num_categories
             num_categories_to_use = max(
                 1, min(self.max_num_categories, len(top_categories) - 1)
             )
@@ -392,8 +403,9 @@ class OneHotEncoderMultipleCols(BaseEstimator, TransformerMixin):
         for col in self.fitted_vars:
             if col not in data.columns:
                 raise ValueError(
-                    f"Fitted one-hot-encoded column {col} does not exist in dataframe given "
-                    "for transformation. This will result in a shape mismatch for train/prediction job."
+                    f"Fitted one-hot-encoded column {col} does not exist in dataframe \
+                        given for transformation. This will result in a shape \
+                            mismatch for train/prediction job."
                 )
 
             for cat in self.top_cat_by_ohe_col[col]:

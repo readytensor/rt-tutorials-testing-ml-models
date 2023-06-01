@@ -1,6 +1,6 @@
-
-import os 
+import os
 import pytest
+
 
 @pytest.fixture
 def performance_test_results_dir_path():
@@ -12,12 +12,14 @@ def performance_test_results_dir_path():
 @pytest.fixture
 def train_predict_perf_results_path(performance_test_results_dir_path):
     file_path = os.path.join(
-        performance_test_results_dir_path, "train_predict_performance_results.csv")
+        performance_test_results_dir_path, "train_predict_performance_results.csv"
+    )
     return str(file_path)
 
 
 @pytest.fixture
 def inference_apis_perf_results_path(performance_test_results_dir_path):
     file_path = os.path.join(
-        performance_test_results_dir_path, "inference_api_performance_results.csv")
+        performance_test_results_dir_path, "inference_api_performance_results.csv"
+    )
     return str(file_path)

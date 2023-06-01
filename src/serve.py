@@ -65,7 +65,8 @@ def create_app(model_resources):
         predicted class probabilities.
 
         Args:
-            request (InferenceRequestBodyModel): The request body containing the input data.
+            request (InferenceRequestBodyModel): The request body containing the
+                input data.
 
         Raises:
             HTTPException: If there is an error during inference.
@@ -100,14 +101,16 @@ def create_app(model_resources):
         the predicted class probabilities with explanations.
 
         Args:
-            request (InferenceRequestBodyModel): The request body containing the input data.
+            request (InferenceRequestBodyModel): The request body containing
+                the input data.
 
         Raises:
             HTTPException: If there is an error during inference.
 
         Returns:
             dict: A dictionary with "status", "message", "timestamp", "requestId",
-                    "targetClasses", "targetDescription", "predictions", and "explanationMethod" keys.
+                "targetClasses", "targetDescription", "predictions",
+                and "explanationMethod" keys.
         """
         try:
             request_id = generate_unique_request_id()

@@ -1,16 +1,14 @@
-import pandas as pd
-from pandas import DataFrame, Series
-import numpy as np
-from typing import Any, List, Tuple
-import pytest
+from pandas import DataFrame
+from typing import Any, List
 from pathlib import Path
 from py.path import local as LocalPath
 
 from xai.explainer import (
-    ShapClassificationExplainer, 
-    fit_and_save_explainer, 
+    ShapClassificationExplainer,
+    fit_and_save_explainer,
     load_explainer,
-    get_explanations_from_explainer)
+    get_explanations_from_explainer,
+)
 
 
 def test_fit_explainer(transformed_train_inputs: DataFrame) -> None:
@@ -35,14 +33,14 @@ def test_build_explainer(transformed_train_inputs: DataFrame, predictor: Any) ->
     """
     explainer = ShapClassificationExplainer()
     explainer.fit(transformed_train_inputs)
-    class_names = ['class_0', 'class_1']  # Assuming binary classification
+    class_names = ["class_0", "class_1"]  # Assuming binary classification
     shap_explainer = explainer._build_explainer(predictor, class_names)
     assert shap_explainer is not None
 
 
 def test_get_explanations(
-        transformed_test_inputs: DataFrame, predictor: Any,
-        class_names: List[str]) -> None:
+    transformed_test_inputs: DataFrame, predictor: Any, class_names: List[str]
+) -> None:
     """
     Test getting explanations.
 
@@ -54,13 +52,17 @@ def test_get_explanations(
     """
     explainer = ShapClassificationExplainer()
     explainer.fit(transformed_test_inputs)
-    explanations = explainer.get_explanations(transformed_test_inputs, predictor, class_names)
+    explanations = explainer.get_explanations(
+        transformed_test_inputs, predictor, class_names
+    )
     assert explanations is not None
     assert "explanation_method" in explanations
     assert "explanations" in explanations
 
 
-def test_save_and_load_explainer(tmpdir: LocalPath, transformed_train_inputs: DataFrame) -> None:
+def test_save_and_load_explainer(
+    tmpdir: LocalPath, transformed_train_inputs: DataFrame
+) -> None:
     """
     Test saving and loading of the explainer.
 
@@ -71,7 +73,7 @@ def test_save_and_load_explainer(tmpdir: LocalPath, transformed_train_inputs: Da
     """
     explainer = ShapClassificationExplainer(max_local_explanations=10)
     explainer.fit(transformed_train_inputs)
-    file_path = tmpdir.join('explainer.pkl')
+    file_path = tmpdir.join("explainer.pkl")
     explainer.save(file_path)
     loaded_explainer = ShapClassificationExplainer.load(file_path)
     assert loaded_explainer is not None
@@ -80,8 +82,10 @@ def test_save_and_load_explainer(tmpdir: LocalPath, transformed_train_inputs: Da
 
 
 def test_fit_and_save_explainer(
-        transformed_train_inputs: DataFrame,
-        explainer_config_file_path: str, explainer_file_path: str) -> None:
+    transformed_train_inputs: DataFrame,
+    explainer_config_file_path: str,
+    explainer_file_path: str,
+) -> None:
     """
     Test fitting and saving of the explainer.
 
@@ -92,15 +96,18 @@ def test_fit_and_save_explainer(
 
     """
     explainer = fit_and_save_explainer(
-        transformed_train_inputs, explainer_config_file_path, explainer_file_path)
+        transformed_train_inputs, explainer_config_file_path, explainer_file_path
+    )
     assert Path(explainer_file_path).is_file()
     assert explainer is not None
     assert explainer._explainer_data.shape == transformed_train_inputs.shape
 
 
 def test_load_explainer(
-        transformed_train_inputs: DataFrame,
-        explainer_config_file_path: str, explainer_file_path: str) -> None:
+    transformed_train_inputs: DataFrame,
+    explainer_config_file_path: str,
+    explainer_file_path: str,
+) -> None:
     """
     Test loading of the explainer.
 
@@ -111,15 +118,20 @@ def test_load_explainer(
 
     """
     _ = fit_and_save_explainer(
-        transformed_train_inputs, explainer_config_file_path, explainer_file_path)
+        transformed_train_inputs, explainer_config_file_path, explainer_file_path
+    )
     loaded_explainer = load_explainer(explainer_file_path)
     assert loaded_explainer is not None
     assert loaded_explainer._explainer_data.shape == transformed_train_inputs.shape
 
 
 def test_get_explanations_from_explainer(
-        transformed_test_inputs: DataFrame, explainer_config_file_path: str, explainer_file_path: str,
-        predictor: Any, class_names: List[str]) -> None:
+    transformed_test_inputs: DataFrame,
+    explainer_config_file_path: str,
+    explainer_file_path: str,
+    predictor: Any,
+    class_names: List[str],
+) -> None:
     """
     Test the test_get_explanations_from_explainer function.
 
@@ -132,7 +144,8 @@ def test_get_explanations_from_explainer(
 
     """
     explainer = fit_and_save_explainer(
-        transformed_test_inputs, explainer_config_file_path, explainer_file_path)
+        transformed_test_inputs, explainer_config_file_path, explainer_file_path
+    )
     explanations = get_explanations_from_explainer(
         transformed_test_inputs, explainer, predictor, class_names
     )
@@ -147,8 +160,13 @@ def test_get_explanations_from_explainer(
 
 
 def test_explanations_from_loaded_explainer(
-        transformed_train_inputs: DataFrame, explainer_config_file_path: str, explainer_file_path: str,
-        predictor: Any, transformed_test_inputs: DataFrame, class_names: List[str]) -> None:
+    transformed_train_inputs: DataFrame,
+    explainer_config_file_path: str,
+    explainer_file_path: str,
+    predictor: Any,
+    transformed_test_inputs: DataFrame,
+    class_names: List[str],
+) -> None:
     """
     Test loading of the explainer and getting explanations.
 
@@ -162,7 +180,8 @@ def test_explanations_from_loaded_explainer(
 
     """
     fit_and_save_explainer(
-        transformed_train_inputs, explainer_config_file_path, explainer_file_path)
+        transformed_train_inputs, explainer_config_file_path, explainer_file_path
+    )
     loaded_explainer = load_explainer(explainer_file_path)
     assert loaded_explainer._explainer_data.shape == transformed_train_inputs.shape
 

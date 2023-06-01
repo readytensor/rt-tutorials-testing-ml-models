@@ -10,15 +10,16 @@ def get_data_validator(schema: BinaryClassificationSchema, is_train: bool) -> Ba
     The resulting validator checks the following:
 
     1. That the input DataFrame contains the ID field specified in the schema.
-    2. If `is_train` is `True`, that the input DataFrame contains the target field specified in the schema.
+    2. If `is_train` is `True`, that the input DataFrame contains the target field
+        specified in the schema.
     3. That the input DataFrame contains all feature fields specified in the schema.
 
     If any of these checks fail, the validator will raise a ValueError.
 
     Args:
         schema (BinaryClassificationSchema): An instance of BinaryClassificationSchema.
-        is_train (bool): Whether the data is for training or not. Determines whether the presence of a target field
-                         is required in the data.
+        is_train (bool): Whether the data is for training or not. Determines whether
+            the presence of a target field is required in the data.
 
     Returns:
         BaseModel: A dynamic Pydantic BaseModel class for data validation.
@@ -62,7 +63,8 @@ def validate_data(
 
     Args:
         data (pd.DataFrame): The train or test data to validate.
-        data_schema (BinaryClassificationSchema): An instance of BinaryClassificationSchema.
+        data_schema (BinaryClassificationSchema): An instance of
+            inaryClassificationSchema.
         is_train (bool): Whether the data is for training or not.
 
     Returns:
