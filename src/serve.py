@@ -14,7 +14,7 @@ from serve_utils import (
     generate_unique_request_id,
     transform_req_data_and_make_predictions,
     combine_predictions_response_with_explanations,
-    logger
+    logger,
 )
 
 
@@ -32,9 +32,10 @@ def create_app(model_resources):
         logger.info("Received ping request. Service is healthy...")
         return {"message": "Pong!"}
 
-
     @app.exception_handler(RequestValidationError)
-    async def validation_exception_handler(request: Any, exc: RequestValidationError) -> JSONResponse:
+    async def validation_exception_handler(
+        request: Any, exc: RequestValidationError
+    ) -> JSONResponse:
         """
         Handle validation errors for FastAPI requests.
 
@@ -54,10 +55,9 @@ def create_app(model_resources):
             content={"status": "error", "message": str(exc), "predictions": None},
         )
 
-
     InferenceRequestBodyModel = get_inference_request_body_model(
-        model_resources.data_schema)
-
+        model_resources.data_schema
+    )
 
     @app.post("/infer", tags=["inference"], response_class=JSONResponse)
     async def infer(request: InferenceRequestBodyModel) -> dict:
@@ -65,7 +65,7 @@ def create_app(model_resources):
         predicted class probabilities.
 
         Args:
-            request (InferenceRequestBodyModel): The request body containing the input data.  
+            request (InferenceRequestBodyModel): The request body containing the input data.
 
         Raises:
             HTTPException: If there is an error during inference.
@@ -78,7 +78,8 @@ def create_app(model_resources):
             logger.info(f"Responding to inference request. Request id: {request_id}")
             logger.info("Starting predictions...")
             _, predictions_response = await transform_req_data_and_make_predictions(
-                request, model_resources, request_id)
+                request, model_resources, request_id
+            )
             logger.info("Returning predictions...")
             return predictions_response
         except Exception as exc:
@@ -86,10 +87,12 @@ def create_app(model_resources):
             # Log the error to the general logging file 'serve.log'
             logger.error(f"{err_msg} Error: {str(exc)}")
             # Log the error to the separate logging file 'serve-error.log'
-            log_error(message=err_msg, error=exc, error_fpath=paths.SERVE_ERROR_FILE_PATH)
+            log_error(
+                message=err_msg, error=exc, error_fpath=paths.SERVE_ERROR_FILE_PATH
+            )
             raise HTTPException(
-                status_code=500, detail=f"{err_msg} Error: {str(exc)}") from exc
-
+                status_code=500, detail=f"{err_msg} Error: {str(exc)}"
+            ) from exc
 
     @app.post("/explain", tags=["explanations", "XAI"], response_class=JSONResponse)
     async def explain(request: InferenceRequestBodyModel) -> dict:
@@ -105,25 +108,27 @@ def create_app(model_resources):
         Returns:
             dict: A dictionary with "status", "message", "timestamp", "requestId",
                     "targetClasses", "targetDescription", "predictions", and "explanationMethod" keys.
-        """    
+        """
         try:
             request_id = generate_unique_request_id()
             logger.info(f"Responding to explanation request. Request id: {request_id}")
             logger.info("Starting prediction...")
-            transformed_data, predictions_response = \
-                await transform_req_data_and_make_predictions(
-                request, model_resources, request_id)
+            (
+                transformed_data,
+                predictions_response,
+            ) = await transform_req_data_and_make_predictions(
+                request, model_resources, request_id
+            )
             logger.info("Generating explanations...")
             explanations = get_explanations_from_explainer(
                 instances_df=transformed_data,
                 explainer=model_resources.explainer,
                 predictor_model=model_resources.predictor_model,
-                class_names=model_resources.data_schema.target_classes
+                class_names=model_resources.data_schema.target_classes,
             )
             logger.info("Combining predictions and explanations...")
             predictions_response = combine_predictions_response_with_explanations(
-                predictions_response=predictions_response,
-                explanations=explanations
+                predictions_response=predictions_response, explanations=explanations
             )
             logger.info("Returning explanations response...")
             return predictions_response
@@ -132,13 +137,17 @@ def create_app(model_resources):
             # Log the error to the general logging file 'serve.log'
             logger.error(f"{err_msg} Error: {str(exc)}")
             # Log the error to the separate logging file 'serve-error.log'
-            log_error(message=err_msg, error=exc, error_fpath=paths.SERVE_ERROR_FILE_PATH)
-            raise HTTPException(status_code=500, detail=f"{err_msg} Error: {str(exc)}") from exc
+            log_error(
+                message=err_msg, error=exc, error_fpath=paths.SERVE_ERROR_FILE_PATH
+            )
+            raise HTTPException(
+                status_code=500, detail=f"{err_msg} Error: {str(exc)}"
+            ) from exc
 
     return app
 
 
-def create_and_run_app(model_resources:ModelResources):
+def create_and_run_app(model_resources: ModelResources):
     """Create and run Fastapi app for inference service
 
     Args:

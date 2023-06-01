@@ -25,8 +25,12 @@ def read_json_as_dict(input_path: str) -> Dict:
     """
     if os.path.isdir(input_path):
         # Get all the JSON files in the directory
-        json_files = [os.path.join(input_path, f) for f in os.listdir(input_path) if f.endswith('.json')]
-        
+        json_files = [
+            os.path.join(input_path, f)
+            for f in os.listdir(input_path)
+            if f.endswith(".json")
+        ]
+
         # If there are no JSON files, raise a ValueError
         if not json_files:
             raise ValueError("No JSON files found in the directory")
@@ -40,7 +44,7 @@ def read_json_as_dict(input_path: str) -> Dict:
         raise ValueError("Input path is neither a file nor a directory")
 
     # Read the JSON file and return it as a dictionary
-    with open(json_file_path, 'r', encoding="utf-8") as file:
+    with open(json_file_path, "r", encoding="utf-8") as file:
         json_data_as_dict = json.load(file)
 
     return json_data_as_dict
@@ -63,13 +67,13 @@ def read_csv_in_directory(file_dir_path: str) -> pd.DataFrame:
     if not os.path.exists(file_dir_path):
         raise FileNotFoundError(f"Directory does not exist: {file_dir_path}")
 
-    csv_files = [file for file in os.listdir(file_dir_path) if file.endswith('.csv')]
+    csv_files = [file for file in os.listdir(file_dir_path) if file.endswith(".csv")]
 
     if not csv_files:
-        raise ValueError(f'No CSV file found in directory {file_dir_path}')
+        raise ValueError(f"No CSV file found in directory {file_dir_path}")
 
     if len(csv_files) > 1:
-        raise ValueError(f'Multiple CSV files found in directory {file_dir_path}.')
+        raise ValueError(f"Multiple CSV files found in directory {file_dir_path}.")
 
     csv_file_path = os.path.join(file_dir_path, csv_files[0])
     df = pd.read_csv(csv_file_path)
@@ -89,14 +93,16 @@ def set_seeds(seed_value: int) -> None:
         None
     """
     if isinstance(seed_value, int):
-        os.environ['PYTHONHASHSEED'] = str(seed_value)
+        os.environ["PYTHONHASHSEED"] = str(seed_value)
         random.seed(seed_value)
         np.random.seed(seed_value)
     else:
         raise ValueError(f"Invalid seed value: {seed_value}. Cannot set seeds.")
 
-  
-def split_train_val(data: pd.DataFrame, val_pct: float) -> Tuple[pd.DataFrame, pd.DataFrame]:
+
+def split_train_val(
+    data: pd.DataFrame, val_pct: float
+) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """
     Splits the input data into training and validation sets based on the given percentage.
 
@@ -115,30 +121,30 @@ def save_dataframe_as_csv(dataframe: pd.DataFrame, file_path: str) -> None:
     """
     Saves a pandas dataframe to a CSV file in the given directory path.
     Float values are saved with 4 decimal places.
-    
+
     Args:
     - df (pd.DataFrame): The pandas dataframe to be saved.
     - file_path (str): File path and name to save the CSV file.
-    
+
     Returns:
     - None
-    
+
     Raises:
     - IOError: If an error occurs while saving the CSV file.
     """
     try:
-        dataframe.to_csv(file_path, index=False, float_format='%.4f')
+        dataframe.to_csv(file_path, index=False, float_format="%.4f")
     except IOError as exc:
-        raise IOError(f'Error saving CSV file: {exc}') from exc
+        raise IOError(f"Error saving CSV file: {exc}") from exc
 
 
 def clear_files_in_directory(directory_path: str) -> None:
     """
     Clears all files in the given directory path.
-    
+
     Args:
     - directory_path (str): The path to the directory containing the files to be cleared.
-    
+
     Returns:
     - None
     """
@@ -147,17 +153,18 @@ def clear_files_in_directory(directory_path: str) -> None:
         os.remove(file_path)
 
 
-def save_json(file_path_and_name:str, data: Any) -> None:
+def save_json(file_path_and_name: str, data: Any) -> None:
     """Save json to a path (directory + filename)"""
-    with open(file_path_and_name, 'w', encoding="utf-8") as file:
+    with open(file_path_and_name, "w", encoding="utf-8") as file:
         json.dump(
             data,
             file,
             default=lambda o: make_serializable(o),
             sort_keys=True,
             indent=4,
-            separators=(',', ': ')
+            separators=(",", ": "),
         )
+
 
 def make_serializable(obj: Any) -> Union[int, float, List[Union[int, float]], Any]:
     """
@@ -181,4 +188,3 @@ def make_serializable(obj: Any) -> Union[int, float, List[Union[int, float]], An
         return obj.tolist()
     else:
         return json.JSONEncoder.default(None, obj)
-    

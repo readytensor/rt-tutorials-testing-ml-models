@@ -44,7 +44,7 @@ def sample_request_data():
 
 ENDPOINTS = ["/infer", "/explain"]
 
-@pytest.mark.performance
+@pytest.mark.slow
 @pytest.mark.parametrize("endpoint", ENDPOINTS)
 def test_api_endpoint_performance(
         app, sample_request_data, inference_apis_perf_results_path, endpoint):

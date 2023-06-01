@@ -1,16 +1,9 @@
 import numpy as np
 import pandas as pd
-from typing import Any, List
+from typing import List
 from schema.data_schema import load_saved_schema
-from utils import (
-    read_json_as_dict,
-    read_csv_in_directory, 
-    save_dataframe_as_csv
-)
-from preprocessing.preprocess import (
-    load_pipeline_and_target_encoder,
-    transform_data
-)
+from utils import read_json_as_dict, read_csv_in_directory, save_dataframe_as_csv
+from preprocessing.preprocess import load_pipeline_and_target_encoder, transform_data
 from prediction.predictor_model import load_predictor_model, predict_with_model
 from config import paths
 from logger import get_logger, log_error
@@ -20,12 +13,13 @@ logger = get_logger(task_name="predict")
 
 
 def create_predictions_dataframe(
-        predictions_arr: np.ndarray,
-        class_names: List[str],
-        prediction_field_name: str,
-        ids: pd.Series,
-        id_field_name: str,
-        return_probs: bool = False) -> pd.DataFrame:
+    predictions_arr: np.ndarray,
+    class_names: List[str],
+    prediction_field_name: str,
+    ids: pd.Series,
+    id_field_name: str,
+    return_probs: bool = False,
+) -> pd.DataFrame:
     """
     Converts the predictions numpy array into a dataframe having the required structure.
 
@@ -48,15 +42,16 @@ def create_predictions_dataframe(
         Predictions as a pandas dataframe
     """
     if predictions_arr.shape[1] != len(class_names):
-        raise ValueError("Length of class names does not match number of prediction columns")    
+        raise ValueError(
+            "Length of class names does not match number of prediction columns"
+        )
     predictions_df = pd.DataFrame(predictions_arr, columns=class_names)
     if len(predictions_arr) != len(ids):
-        raise ValueError("Length of ids does not match number of predictions")   
+        raise ValueError("Length of ids does not match number of predictions")
     predictions_df.insert(0, id_field_name, ids)
     if return_probs:
         return predictions_df
-    predictions_df[prediction_field_name] = \
-        predictions_df[class_names].idxmax(axis=1)
+    predictions_df[prediction_field_name] = predictions_df[class_names].idxmax(axis=1)
     predictions_df.drop(class_names, axis=1, inplace=True)
     return predictions_df
 
@@ -98,27 +93,33 @@ def run_batch_predictions(
 
         logger.info("Loading model config...")
         model_config = read_json_as_dict(model_config_file_path)
-        
+
         logger.info("Loading prediction input data...")
         test_data = read_csv_in_directory(file_dir_path=test_dir)
-    
+
         # validate the data
         logger.info("Validating prediction data...")
-        validated_test_data = validate_data(data=test_data, data_schema=data_schema, is_train=False)
-        
+        validated_test_data = validate_data(
+            data=test_data, data_schema=data_schema, is_train=False
+        )
+
         logger.info("Loading pipeline and encoder...")
         preprocessor, target_encoder = load_pipeline_and_target_encoder(
-            pipeline_file_path, target_encoder_file_path)
+            pipeline_file_path, target_encoder_file_path
+        )
 
         logger.info("Transforming prediction inputs ...")
-        transformed_data, _ = transform_data(preprocessor, target_encoder, validated_test_data)
-        
+        transformed_data, _ = transform_data(
+            preprocessor, target_encoder, validated_test_data
+        )
+
         logger.info("Loading predictor model...")
         predictor_model = load_predictor_model(predictor_file_path)
 
         logger.info("Making predictions...")
         predictions_arr = predict_with_model(
-            predictor_model, transformed_data, return_probs=True)
+            predictor_model, transformed_data, return_probs=True
+        )
 
         logger.info("Transforming predictions into dataframe...")
         predictions_df = create_predictions_dataframe(
@@ -127,13 +128,11 @@ def run_batch_predictions(
             model_config["prediction_field_name"],
             test_data[data_schema.id],
             data_schema.id,
-            return_probs=True
+            return_probs=True,
         )
-        
+
         logger.info("Saving predictions...")
-        save_dataframe_as_csv(
-            dataframe=predictions_df,
-            file_path=predictions_file_path)
+        save_dataframe_as_csv(dataframe=predictions_df, file_path=predictions_file_path)
 
         logger.info("Batch predictions completed successfully")
 
@@ -143,7 +142,6 @@ def run_batch_predictions(
         logger.error(f"{err_msg} Error: {str(exc)}")
         # Log the error to the separate logging file 'predict-error.log'
         log_error(message=err_msg, error=exc, error_fpath=paths.PREDICT_ERROR_FILE_PATH)
-
 
 
 if __name__ == "__main__":

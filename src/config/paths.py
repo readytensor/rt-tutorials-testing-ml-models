@@ -53,12 +53,14 @@ SRC_DIR = os.path.join(ROOT_DIR, "src")
 # Path to config directory
 CONFIG_DIR = os.path.join(SRC_DIR, "config")
 # Path to model config
-MODEL_CONFIG_FILE_PATH  = os.path.join(CONFIG_DIR, "model_config.json")
+MODEL_CONFIG_FILE_PATH = os.path.join(CONFIG_DIR, "model_config.json")
 # Path to preprocessing config
-PREPROCESSING_CONFIG_FILE_PATH  = os.path.join(CONFIG_DIR, "preprocessing.json")
+PREPROCESSING_CONFIG_FILE_PATH = os.path.join(CONFIG_DIR, "preprocessing.json")
 # Path to hyperparameters file with default values
-DEFAULT_HYPERPARAMETERS_FILE_PATH  = os.path.join(CONFIG_DIR, "default_hyperparameters.json")
+DEFAULT_HYPERPARAMETERS_FILE_PATH = os.path.join(
+    CONFIG_DIR, "default_hyperparameters.json"
+)
 # Path to hyperparameter tuning config file
-HPT_CONFIG_FILE_PATH  = os.path.join(CONFIG_DIR, "hpt.json")
+HPT_CONFIG_FILE_PATH = os.path.join(CONFIG_DIR, "hpt.json")
 # Path to explainer (explainable AI or XAI) config file
-EXPLAINER_CONFIG_FILE_PATH  = os.path.join(CONFIG_DIR, "explainer.json")
+EXPLAINER_CONFIG_FILE_PATH = os.path.join(CONFIG_DIR, "explainer.json")

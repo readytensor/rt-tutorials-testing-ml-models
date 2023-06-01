@@ -1,4 +1,4 @@
-from typing import List, Any, Union
+from typing import List, Union
 from pydantic import BaseModel, create_model, Field, validator
 
 from schema.data_schema import BinaryClassificationSchema
@@ -14,9 +14,7 @@ def create_instance_model(schema: BinaryClassificationSchema) -> BaseModel:
     Returns:
         BaseModel: The dynamically created Pydantic model.
     """
-    fields = {
-        schema.id: (str, Field(..., example='some_id_123'))
-    }
+    fields = {schema.id: (str, Field(..., example="some_id_123"))}
 
     for feature in schema.numeric_features:
         example_value = schema.get_example_value_for_feature(feature)
@@ -34,7 +32,7 @@ def create_instance_model(schema: BinaryClassificationSchema) -> BaseModel:
             field_type = str
         fields[feature] = (field_type, Field(..., example=example_value))
 
-    return create_model("Instance", **fields )
+    return create_model("Instance", **fields)
 
 
 def get_inference_request_body_model(schema: BinaryClassificationSchema) -> BaseModel:
@@ -67,32 +65,46 @@ def get_inference_request_body_model(schema: BinaryClassificationSchema) -> Base
         Attributes:
             instances (List[Instance_Model]): A list of data instances to be validated.
         """
+
         instances: List[InstanceModel] = Field(..., min_items=1)
-        
+
         @validator("instances", pre=True, each_item=True, allow_reuse=True)
         def validate_non_nullable_features(cls, instance):
             """
             Validates that non-nullable features must have non-null values.
             """
             for feature, value in instance.items():
-                if feature in schema.features and not schema.is_feature_nullable(feature) and value is None:
-                    raise ValueError(f"Feature `{feature}` is non-nullable. "
-                                     f"Given null value is not allowed.")
-                        
+                if (
+                    feature in schema.features
+                    and not schema.is_feature_nullable(feature)
+                    and value is None
+                ):
+                    raise ValueError(
+                        f"Feature `{feature}` is non-nullable. "
+                        f"Given null value is not allowed."
+                    )
+
             return instance
-        
-        
+
         @validator("instances", pre=True, each_item=True, allow_reuse=True)
         def validate_categorical_features(cls, instance):
             """
-            Validates that the value of a categorical feature is one of the allowed values as defined in the schema file.
+            Validates that the value of a categorical feature is one of the allowed values as
+            defined in the schema file.
             """
             for feature, value in instance.items():
                 if feature in schema.categorical_features:
-                    categories = [str(c) for c in schema.get_allowed_values_for_categorical_feature(feature)]            
+                    categories = [
+                        str(c)
+                        for c in schema.get_allowed_values_for_categorical_feature(
+                            feature
+                        )
+                    ]
                     if value is not None and str(value) not in categories:
-                        raise ValueError(f"Value '{value}' not allowed for '{feature}'." 
-                                         f"Allowed values: {categories}")
+                        raise ValueError(
+                            f"Value '{value}' not allowed for '{feature}'."
+                            f"Allowed values: {categories}"
+                        )
             return instance
 
     return InferenceRequestBody

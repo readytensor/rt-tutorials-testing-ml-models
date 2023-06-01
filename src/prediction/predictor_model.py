@@ -7,8 +7,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.exceptions import NotFittedError
 
 
-warnings.filterwarnings('ignore')
-
+warnings.filterwarnings("ignore")
 
 
 class Classifier:
@@ -17,19 +16,24 @@ class Classifier:
     This class provides a consistent interface that can be used with other classifier models.
     The Random Forest binary classifier is encapsulated inside this class.
     """
+
     model_name = "random_forest_binary_classifier"
 
-    def __init__(self,
-            n_estimators: Optional[int] = 200,
-            min_samples_split: Optional[int] = 8,
-            min_samples_leaf: Optional[int] = 4,
-            **kwargs):
+    def __init__(
+        self,
+        n_estimators: Optional[int] = 200,
+        min_samples_split: Optional[int] = 8,
+        min_samples_leaf: Optional[int] = 4,
+        **kwargs,
+    ):
         """Construct a new Random Forest binary classifier.
 
         Args:
             n_estimators (int, optional): The number of trees in the forest. Defaults to 100.
-            min_samples_split (int, optional): The minimum number of samples required to split an internal node. Defaults to 2.
-            min_samples_leaf (int, optional): The minimum number of samples required to be at a leaf node. Defaults to 1.
+            min_samples_split (int, optional): The minimum number of samples required to split an internal node.
+                                               Defaults to 2.
+            min_samples_leaf (int, optional): The minimum number of samples required to be at a leaf node.
+                                              Defaults to 1.
         """
         self.n_estimators = int(n_estimators)
         self.min_samples_split = int(min_samples_split)
@@ -42,7 +46,7 @@ class Classifier:
             n_estimators=self.n_estimators,
             min_samples_split=self.min_samples_split,
             min_samples_leaf=self.min_samples_leaf,
-            random_state=0
+            random_state=0,
         )
         return model
 
@@ -97,7 +101,7 @@ class Classifier:
         joblib.dump(self, model_file_path)
 
     @classmethod
-    def load(cls, model_file_path: str) -> 'Classifier':
+    def load(cls, model_file_path: str) -> "Classifier":
         """Load the Random Forest binary classifier from disk.
 
         Args:
@@ -107,20 +111,19 @@ class Classifier:
         """
         model = joblib.load(model_file_path)
         return model
-    
+
     def __str__(self):
-        return (f"Model name: {self.model_name}("
+        return (
+            f"Model name: {self.model_name}("
             f"n_estimators: {self.n_estimators}, "
             f"n_estimators: {self.min_samples_split}, "
             f"n_estimators: {self.min_samples_leaf})"
-           )
-        
+        )
 
 
-def train_predictor_model( 
-        train_inputs: pd.DataFrame,
-        train_targets: pd.Series,
-        hyperparameters: dict) -> Tuple:
+def train_predictor_model(
+    train_inputs: pd.DataFrame, train_targets: pd.Series, hyperparameters: dict
+) -> Tuple:
     """
     Instantiate and train the predictor model.
 
@@ -133,14 +136,13 @@ def train_predictor_model(
         'Classifier': The classifier model
     """
     classifier = Classifier(**hyperparameters)
-    classifier.fit(
-        train_inputs=train_inputs,
-        train_targets=train_targets
-    )
+    classifier.fit(train_inputs=train_inputs, train_targets=train_targets)
     return classifier
 
 
-def predict_with_model(classifier: Classifier, data: pd.DataFrame, return_probs=False) -> np.ndarray:
+def predict_with_model(
+    classifier: Classifier, data: pd.DataFrame, return_probs=False
+) -> np.ndarray:
     """
     Predict class probabilities for the given data.
 
@@ -181,7 +183,9 @@ def load_predictor_model(model_fpath: str) -> Classifier:
     return Classifier.load(model_fpath)
 
 
-def evaluate_predictor_model(model: Classifier, x_test: pd.DataFrame, y_test: pd.Series) -> float:
+def evaluate_predictor_model(
+    model: Classifier, x_test: pd.DataFrame, y_test: pd.Series
+) -> float:
     """
     Evaluate the classifier model and return the accuracy.
 

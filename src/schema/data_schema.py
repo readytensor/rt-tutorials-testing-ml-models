@@ -4,6 +4,7 @@ import joblib
 from utils import read_json_as_dict
 from data_models.schema_validator import validate_schema_dict
 
+
 class BinaryClassificationSchema:
     """
     A class for loading and providing access to a binary classification schema. This class allows
@@ -32,7 +33,8 @@ class BinaryClassificationSchema:
         Gets the model category.
 
         Returns:
-            str: The category of the machine learning model (e.g., binary_classification, multi-class_classification, regression, object_detection, etc.).
+            str: The category of the machine learning model (e.g., binary_classification,
+                 multi-class_classification, regression, object_detection, etc.).
         """
         return self.schema["modelCategory"]
 
@@ -85,7 +87,9 @@ class BinaryClassificationSchema:
         """
         fields = self.schema["features"]
         numeric_features = [f["name"] for f in fields if f["dataType"] == "NUMERIC"]
-        categorical_features = [f["name"] for f in fields if f["dataType"] == "CATEGORICAL"]
+        categorical_features = [
+            f["name"] for f in fields if f["dataType"] == "CATEGORICAL"
+        ]
         return numeric_features, categorical_features
 
     @property
@@ -106,7 +110,9 @@ class BinaryClassificationSchema:
         Returns:
             str: The description for the ID field.
         """
-        return self.schema["id"].get("description", "No description for target available.")
+        return self.schema["id"].get(
+            "description", "No description for target available."
+        )
 
     @property
     def target(self) -> str:
@@ -146,7 +152,9 @@ class BinaryClassificationSchema:
         Returns:
             str: The description for the target field.
         """
-        return self.schema["target"].get("description", "No description for target available.")
+        return self.schema["target"].get(
+            "description", "No description for target available."
+        )
 
     @property
     def numeric_features(self) -> List[str]:
@@ -183,7 +191,9 @@ class BinaryClassificationSchema:
                 allowed_values[feature["name"]] = feature["categories"]
         return allowed_values
 
-    def get_allowed_values_for_categorical_feature(self, feature_name: str) -> List[str]:
+    def get_allowed_values_for_categorical_feature(
+        self, feature_name: str
+    ) -> List[str]:
         """
         Gets the allowed values for a single categorical feature.
 
@@ -197,8 +207,9 @@ class BinaryClassificationSchema:
         for feature in features:
             if feature["dataType"] == "CATEGORICAL" and feature["name"] == feature_name:
                 return feature["categories"]
-        raise ValueError(f"Categorical feature '{feature_name}' not found in the schema.")
-
+        raise ValueError(
+            f"Categorical feature '{feature_name}' not found in the schema."
+        )
 
     def get_description_for_feature(self, feature_name: str) -> str:
         """
@@ -225,7 +236,7 @@ class BinaryClassificationSchema:
 
         Returns:
             List[str]: The example values for the specified feature.
-        """       
+        """
 
         fields = self.schema["features"]
         for field in fields:
@@ -235,7 +246,9 @@ class BinaryClassificationSchema:
                 elif field["dataType"] == "CATEGORICAL":
                     return field["categories"][0]
                 else:
-                    raise ValueError(f"Invalid data type for Feature '{feature_name}' found in the schema.")
+                    raise ValueError(
+                        f"Invalid data type for Feature '{feature_name}' found in the schema."
+                    )
         raise ValueError(f"Feature '{feature_name}' not found in the schema.")
 
     def is_feature_nullable(self, feature_name: str) -> bool:
@@ -275,7 +288,7 @@ class BinaryClassificationSchema:
         return [self.id, self.target] + self.features
 
 
-def load_json_data_schema(schema_dir_path:str) -> BinaryClassificationSchema:
+def load_json_data_schema(schema_dir_path: str) -> BinaryClassificationSchema:
     """
     Load the JSON file schema into a dictionary, validate the schema dict for its correctness,
     and use the validated schema to instantiate the schema provider.
@@ -292,9 +305,7 @@ def load_json_data_schema(schema_dir_path:str) -> BinaryClassificationSchema:
     return data_schema
 
 
-def save_schema(
-        schema: BinaryClassificationSchema,
-        output_path: str) -> None:
+def save_schema(schema: BinaryClassificationSchema, output_path: str) -> None:
     """
     Save the schema to a JSON file.
 

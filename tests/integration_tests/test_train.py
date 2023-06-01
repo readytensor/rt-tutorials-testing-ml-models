@@ -3,6 +3,7 @@ import os
 from src.train import run_training
 
 
+@pytest.mark.slow
 def test_run_training(
         tmpdir, 
         input_schema_dir, 

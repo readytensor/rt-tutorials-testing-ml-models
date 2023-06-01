@@ -23,32 +23,40 @@ def get_data_validator(schema: BinaryClassificationSchema, is_train: bool) -> Ba
     Returns:
         BaseModel: A dynamic Pydantic BaseModel class for data validation.
     """
+
     class DataValidator(BaseModel):
         data: pd.DataFrame
 
         class Config:
             arbitrary_types_allowed = True
 
-        @validator('data', allow_reuse=True)
+        @validator("data", allow_reuse=True)
         def validate_dataframe(cls, data):
 
             if schema.id not in data.columns:
-                raise ValueError(f"ID field '{schema.id}' is not present in the given data")
+                raise ValueError(
+                    f"ID field '{schema.id}' is not present in the given data"
+                )
 
             if is_train and schema.target not in data.columns:
-                raise ValueError(f"Target field '{schema.target}' is not present in the given data")
+                raise ValueError(
+                    f"Target field '{schema.target}' is not present in the given data"
+                )
 
             for feature in schema.features:
                 if feature not in data.columns:
-                    raise ValueError(f"Feature '{feature}' is not present in the given data")
+                    raise ValueError(
+                        f"Feature '{feature}' is not present in the given data"
+                    )
 
             return data
 
     return DataValidator
 
 
-def validate_data(data: pd.DataFrame,
-                  data_schema: BinaryClassificationSchema, is_train: bool) -> pd.DataFrame:
+def validate_data(
+    data: pd.DataFrame, data_schema: BinaryClassificationSchema, is_train: bool
+) -> pd.DataFrame:
     """
     Validates the data using the provided schema.
 

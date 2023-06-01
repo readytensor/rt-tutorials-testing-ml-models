@@ -189,7 +189,7 @@ def run_prediction_and_record(
     return predictions_file_path, end_time-start_time, memory
 
 
-@pytest.mark.performance
+@pytest.mark.slow
 def test_train_predict_performance(
     tmpdir,
     model_config_file_path: str,

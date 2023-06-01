@@ -6,8 +6,9 @@ from sklearn.base import BaseEstimator, TransformerMixin
 
 
 class CustomTargetEncoder(BaseEstimator, TransformerMixin):
-    """ Binarizes the target variable to 0/1 values."""
-    def __init__(self, target_field:str, target_classes: List[str]) -> None:
+    """Binarizes the target variable to 0/1 values."""
+
+    def __init__(self, target_field: str, target_classes: List[str]) -> None:
         """
         Initializes a new instance of the `CustomTargetEncoder` class.
 
@@ -23,7 +24,7 @@ class CustomTargetEncoder(BaseEstimator, TransformerMixin):
         """
         self.target_field = target_field
         self.classes_ = [str(c) for c in target_classes]
-        self.class_encoding = {self.classes_[0]:0, self.classes_[1]:1}
+        self.class_encoding = {self.classes_[0]: 0, self.classes_[1]: 1}
 
     def fit(self, data):
         """
@@ -47,17 +48,22 @@ class CustomTargetEncoder(BaseEstimator, TransformerMixin):
             targets = data[self.target_field].astype(str)
             observed_classes = set(targets)
             if len(observed_classes) != 2:
-                raise ValueError(f"Expected two classes {self.classes_}. Found {len(observed_classes)} class in given target classes: {list(observed_classes)}")
+                raise ValueError(
+                    f"Expected two classes {self.classes_}."
+                    f"Found {len(observed_classes)} class in given target classes: {list(observed_classes)}"
+                )
             if len(observed_classes.intersection(self.classes_)) != 2:
-                raise ValueError(f"Observed classes in target {list(observed_classes)} do not match given allowed values for target: {self.classes_}")
+                raise ValueError(
+                    f"Observed classes in target {list(observed_classes)}"
+                    f"do not match given allowed values for target: {self.classes_}"
+                )
             transformed_targets = targets.apply(str).map(self.class_encoding)
         else:
             transformed_targets = None
         return transformed_targets
 
 
-def get_target_encoder(
-        data_schema: Any) -> 'CustomTargetEncoder':
+def get_target_encoder(data_schema: Any) -> "CustomTargetEncoder":
     """Create a TargetEncoder using the data_schema.
 
     Args:
@@ -68,15 +74,14 @@ def get_target_encoder(
     """
     # Create a target encoder instance
     encoder = CustomTargetEncoder(
-        target_field=data_schema.target,
-        target_classes=data_schema.target_classes)
+        target_field=data_schema.target, target_classes=data_schema.target_classes
+    )
     return encoder
 
 
-
 def train_target_encoder(
-        target_encoder: CustomTargetEncoder,
-        train_data: pd.DataFrame) -> CustomTargetEncoder:
+    target_encoder: CustomTargetEncoder, train_data: pd.DataFrame
+) -> CustomTargetEncoder:
     """Train the target encoder using the given training data.
 
     Args:
@@ -91,8 +96,9 @@ def train_target_encoder(
     return target_encoder
 
 
-def transform_targets(target_encoder: CustomTargetEncoder, 
-                      data: Union[pd.DataFrame, np.ndarray]) -> pd.Series:
+def transform_targets(
+    target_encoder: CustomTargetEncoder, data: Union[pd.DataFrame, np.ndarray]
+) -> pd.Series:
     """Transform the target values using the fitted target encoder.
 
     Args:
@@ -107,7 +113,9 @@ def transform_targets(target_encoder: CustomTargetEncoder,
     return transformed_targets
 
 
-def save_target_encoder(target_encoder: CustomTargetEncoder, file_path_and_name: str) -> None:
+def save_target_encoder(
+    target_encoder: CustomTargetEncoder, file_path_and_name: str
+) -> None:
     """Save a fitted label encoder to a file using joblib.
 
     Args:
@@ -115,6 +123,7 @@ def save_target_encoder(target_encoder: CustomTargetEncoder, file_path_and_name:
         file_path_and_name (str): The filepath to save the LabelEncoder to.
     """
     joblib.dump(target_encoder, file_path_and_name)
+
 
 def load_target_encoder(file_path_and_name: str) -> CustomTargetEncoder:
     """Load the fitted target encoder from the given path.
@@ -126,16 +135,3 @@ def load_target_encoder(file_path_and_name: str) -> CustomTargetEncoder:
         Fitted target encoder.
     """
     return joblib.load(file_path_and_name)
-
-
-if __name__ == "__main__":
-    df = pd.DataFrame()
-    target_encoder = CustomTargetEncoder(
-        target_field="target", target_classes=["A", "B"])
-    result = target_encoder.fit_transform(df)
-    print(result)
-    print(type(result))
-
-    # expected = pd.Series({"target": [1, 0, 1, 0]})
-    # print(type(expected), "expected")
-    # print(expected)
