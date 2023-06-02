@@ -207,7 +207,7 @@ def test_pipeline_with_empty_dataframe(pipeline):
 
 def test_pipeline_with_invalid_dataframe(pipeline):
     """
-    Test the pipeline with an empty DataFrame. This test will help you ensure
+    Test the pipeline with an invalid DataFrame. This test will help you ensure
     that the pipeline throws a TypeError for this case.
     """
     with pytest.raises(TypeError):
