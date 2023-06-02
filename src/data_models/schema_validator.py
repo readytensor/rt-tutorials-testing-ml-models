@@ -1,6 +1,7 @@
-from typing import List, Union, Optional
-from pydantic import BaseModel, validator, ValidationError
 from enum import Enum
+from typing import List, Optional, Union
+
+from pydantic import BaseModel, ValidationError, validator
 
 
 class ID(BaseModel):

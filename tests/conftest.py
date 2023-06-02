@@ -1,10 +1,11 @@
-import pytest
-import pandas as pd
-import numpy as np
 import json
 import os
 import random
 import string
+
+import numpy as np
+import pandas as pd
+import pytest
 
 from schema.data_schema import BinaryClassificationSchema
 from serve_utils import get_model_resources

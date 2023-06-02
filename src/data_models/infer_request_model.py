@@ -1,5 +1,6 @@
 from typing import List, Union
-from pydantic import BaseModel, create_model, Field, validator
+
+from pydantic import BaseModel, Field, create_model, validator
 
 from schema.data_schema import BinaryClassificationSchema
 

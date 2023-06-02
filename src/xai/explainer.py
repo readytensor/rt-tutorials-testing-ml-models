@@ -1,9 +1,10 @@
-from shap import Explainer
+from pathlib import Path
+from typing import Any, Dict, List
+
+import joblib
 import numpy as np
 import pandas as pd
-import joblib
-from typing import Any, Dict, List
-from pathlib import Path
+from shap import Explainer
 
 from prediction.predictor_model import predict_with_model
 from utils import read_json_as_dict

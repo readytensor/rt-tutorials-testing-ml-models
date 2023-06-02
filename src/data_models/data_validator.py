@@ -1,5 +1,6 @@
 import pandas as pd
 from pydantic import BaseModel, validator
+
 from schema.data_schema import BinaryClassificationSchema
 
 

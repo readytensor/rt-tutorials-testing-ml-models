@@ -1,6 +1,7 @@
-import pytest
-import pandas as pd
 from typing import Tuple
+
+import pandas as pd
+import pytest
 from sklearn.datasets import make_classification
 
 from prediction.predictor_model import train_predictor_model

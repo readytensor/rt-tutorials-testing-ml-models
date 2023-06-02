@@ -1,10 +1,13 @@
-import pytest
+import json
 import os
+
 import numpy as np
 import pandas as pd
-import json
-from skopt.space import Real, Categorical, Integer
-from src.hyperparameter_tuning.tuner import SKOHyperparameterTuner, tune_hyperparameters
+import pytest
+from skopt.space import Categorical, Integer, Real
+
+from src.hyperparameter_tuning.tuner import (SKOHyperparameterTuner,
+                                             tune_hyperparameters)
 
 
 @pytest.fixture

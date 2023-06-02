@@ -1,6 +1,8 @@
-import pytest
 import os
+
+import pytest
 from py._path.local import LocalPath
+
 from src.train import run_training
 
 

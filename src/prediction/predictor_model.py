@@ -1,11 +1,11 @@
 import warnings
-import joblib
 from typing import Optional, Tuple
-import pandas as pd
+
+import joblib
 import numpy as np
+import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.exceptions import NotFittedError
-
 
 warnings.filterwarnings("ignore")
 

@@ -1,14 +1,12 @@
-from fastapi.testclient import TestClient
-import pytest
-from time import perf_counter
 import os
+from time import perf_counter
+
+import pytest
+from fastapi.testclient import TestClient
+
 from serve import create_app
-
 from tests.performance_tests.performance_test_helpers import (
-    delete_file_if_exists,
-    store_results_to_csv,
-)
-
+    delete_file_if_exists, store_results_to_csv)
 
 # This global variable will be True if no tests have been run yet, and False otherwise
 FIRST_TEST = True

@@ -1,23 +1,20 @@
 import argparse
-from config import paths
-from schema.data_schema import load_json_data_schema, save_schema
-from utils import set_seeds, read_csv_in_directory, split_train_val, read_json_as_dict
-from preprocessing.preprocess import (
-    train_pipeline_and_target_encoder,
-    transform_data,
-    save_pipeline_and_target_encoder,
-    handle_class_imbalance,
-)
-from prediction.predictor_model import (
-    train_predictor_model,
-    evaluate_predictor_model,
-    save_predictor_model,
-)
-from hyperparameter_tuning.tuner import tune_hyperparameters
-from xai.explainer import fit_and_save_explainer
-from logger import get_logger, log_error
-from data_models.data_validator import validate_data
 
+from config import paths
+from data_models.data_validator import validate_data
+from hyperparameter_tuning.tuner import tune_hyperparameters
+from logger import get_logger, log_error
+from prediction.predictor_model import (evaluate_predictor_model,
+                                        save_predictor_model,
+                                        train_predictor_model)
+from preprocessing.preprocess import (handle_class_imbalance,
+                                      save_pipeline_and_target_encoder,
+                                      train_pipeline_and_target_encoder,
+                                      transform_data)
+from schema.data_schema import load_json_data_schema, save_schema
+from utils import (read_csv_in_directory, read_json_as_dict, set_seeds,
+                   split_train_val)
+from xai.explainer import fit_and_save_explainer
 
 logger = get_logger(task_name="train")
 

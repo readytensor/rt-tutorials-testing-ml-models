@@ -1,14 +1,12 @@
 import os
-import pytest
-from unittest.mock import patch, MagicMock
 import pprint
+from unittest.mock import MagicMock, patch
 
-from src.serve_utils import (
-    get_model_resources,
-    generate_unique_request_id,
-    create_predictions_response,
-    combine_predictions_response_with_explanations,
-)
+import pytest
+
+from src.serve_utils import (combine_predictions_response_with_explanations,
+                             create_predictions_response,
+                             generate_unique_request_id, get_model_resources)
 
 
 @pytest.fixture

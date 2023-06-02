@@ -2,17 +2,13 @@ import json
 import os
 import shutil
 import tempfile
-import pytest
-import pandas as pd
-import numpy as np
 
-from src.utils import (
-    read_json_as_dict,
-    read_csv_in_directory,
-    set_seeds,
-    split_train_val,
-    save_dataframe_as_csv,
-)
+import numpy as np
+import pandas as pd
+import pytest
+
+from src.utils import (read_csv_in_directory, read_json_as_dict,
+                       save_dataframe_as_csv, set_seeds, split_train_val)
 
 
 def test_read_json_as_dict_with_file_path():

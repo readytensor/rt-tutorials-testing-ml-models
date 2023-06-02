@@ -1,13 +1,17 @@
+from typing import List
+
 import numpy as np
 import pandas as pd
-from typing import List
-from schema.data_schema import load_saved_schema
-from utils import read_json_as_dict, read_csv_in_directory, save_dataframe_as_csv
-from preprocessing.preprocess import load_pipeline_and_target_encoder, transform_data
-from prediction.predictor_model import load_predictor_model, predict_with_model
+
 from config import paths
-from logger import get_logger, log_error
 from data_models.data_validator import validate_data
+from logger import get_logger, log_error
+from prediction.predictor_model import load_predictor_model, predict_with_model
+from preprocessing.preprocess import (load_pipeline_and_target_encoder,
+                                      transform_data)
+from schema.data_schema import load_saved_schema
+from utils import (read_csv_in_directory, read_json_as_dict,
+                   save_dataframe_as_csv)
 
 logger = get_logger(task_name="predict")
 

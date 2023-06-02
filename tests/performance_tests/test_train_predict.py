@@ -1,22 +1,17 @@
-import pandas as pd
-import pytest
-from typing import Tuple, Dict, Union
+import json
+import os
 import time
 import tracemalloc
-import os
-import json
+from typing import Dict, Tuple, Union
 
-from tests.performance_tests.performance_test_helpers import (
-    set_seeds_for_data_gen,
-    delete_dir_if_exists,
-    delete_file_if_exists,
-    generate_schema_and_data,
-    store_results_to_csv,
-)
+import pandas as pd
+import pytest
 
-from train import run_training
 from predict import run_batch_predictions
-
+from tests.performance_tests.performance_test_helpers import (
+    delete_dir_if_exists, delete_file_if_exists, generate_schema_and_data,
+    set_seeds_for_data_gen, store_results_to_csv)
+from train import run_training
 
 DATASET_ROWS_LIST = [200, 2000]  # update to [200, 2000, 20000] for full test
 DATASET_COLUMNS_LIST = [2, 20]  # update to [2, 20, 200] for full test

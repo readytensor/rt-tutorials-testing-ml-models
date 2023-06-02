@@ -1,21 +1,16 @@
+from typing import Any, Tuple, Union
+
 import pandas as pd
-from typing import Tuple, Any, Union
 from imblearn.over_sampling import SMOTE
 
-from preprocessing.pipeline import (
-    get_preprocess_pipeline,
-    train_pipeline,
-    transform_inputs,
-    save_pipeline,
-    load_pipeline,
-)
-from preprocessing.target_encoder import (
-    get_target_encoder,
-    train_target_encoder,
-    transform_targets,
-    save_target_encoder,
-    load_target_encoder,
-)
+from preprocessing.pipeline import (get_preprocess_pipeline, load_pipeline,
+                                    save_pipeline, train_pipeline,
+                                    transform_inputs)
+from preprocessing.target_encoder import (get_target_encoder,
+                                          load_target_encoder,
+                                          save_target_encoder,
+                                          train_target_encoder,
+                                          transform_targets)
 from utils import read_json_as_dict
 
 

@@ -1,4 +1,5 @@
 import pytest
+
 from src.schema.data_schema import BinaryClassificationSchema
 
 

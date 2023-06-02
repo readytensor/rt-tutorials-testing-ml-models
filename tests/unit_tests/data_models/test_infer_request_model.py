@@ -1,9 +1,8 @@
 import pytest
 from pydantic import ValidationError
-from data_models.infer_request_model import (
-    create_instance_model,
-    get_inference_request_body_model,
-)
+
+from data_models.infer_request_model import (create_instance_model,
+                                             get_inference_request_body_model)
 from src.schema.data_schema import BinaryClassificationSchema
 
 

@@ -1,13 +1,15 @@
+import math
+from typing import Any, Callable, Dict, List, Union
+
 import numpy as np
 import pandas as pd
-import math
-from typing import List, Union, Any, Dict, Callable
 from skopt import gp_minimize
-from skopt.space import Real, Categorical, Integer
+from skopt.space import Categorical, Integer, Real
 
 from config import paths
+from prediction.predictor_model import (evaluate_predictor_model,
+                                        train_predictor_model)
 from utils import read_json_as_dict, save_dataframe_as_csv
-from prediction.predictor_model import train_predictor_model, evaluate_predictor_model
 
 
 class SKOHyperparameterTuner:

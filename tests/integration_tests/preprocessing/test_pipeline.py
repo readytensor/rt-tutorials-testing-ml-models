@@ -1,12 +1,10 @@
-import pytest
-import pandas as pd
 import numpy as np
+import pandas as pd
+import pytest
 from sklearn.pipeline import Pipeline
-from src.preprocessing.pipeline import (
-    get_preprocess_pipeline,
-    train_pipeline,
-    transform_inputs,
-)
+
+from src.preprocessing.pipeline import (get_preprocess_pipeline,
+                                        train_pipeline, transform_inputs)
 
 
 def test_get_preprocess_pipeline(schema_provider, pipeline_config):

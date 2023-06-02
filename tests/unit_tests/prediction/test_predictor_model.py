@@ -1,16 +1,16 @@
-import pytest
 import os
+
 import numpy as np
+import pytest
 from sklearn.datasets import make_classification
 from sklearn.linear_model import LogisticRegression
-from src.prediction.predictor_model import (
-    Classifier,
-    train_predictor_model,
-    predict_with_model,
-    save_predictor_model,
-    load_predictor_model,
-    evaluate_predictor_model,
-)
+
+from src.prediction.predictor_model import (Classifier,
+                                            evaluate_predictor_model,
+                                            load_predictor_model,
+                                            predict_with_model,
+                                            save_predictor_model,
+                                            train_predictor_model)
 
 
 # Define the hyperparameters fixture

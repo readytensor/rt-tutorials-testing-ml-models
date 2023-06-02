@@ -2,20 +2,21 @@
 This script contains utility functions/classes that are used in serve.py
 """
 import uuid
-from starlette.requests import Request
-from typing import Tuple, Any
+from typing import Any, Tuple
+
 import pandas as pd
+from starlette.requests import Request
 
-from preprocessing.preprocess import load_pipeline_and_target_encoder, transform_data
-from schema.data_schema import load_saved_schema
-from prediction.predictor_model import load_predictor_model, predict_with_model
-from predict import create_predictions_dataframe
-from xai.explainer import load_explainer
-from utils import read_json_as_dict
 from config import paths
-from logger import get_logger, log_error
 from data_models.data_validator import validate_data
-
+from logger import get_logger, log_error
+from predict import create_predictions_dataframe
+from prediction.predictor_model import load_predictor_model, predict_with_model
+from preprocessing.preprocess import (load_pipeline_and_target_encoder,
+                                      transform_data)
+from schema.data_schema import load_saved_schema
+from utils import read_json_as_dict
+from xai.explainer import load_explainer
 
 logger = get_logger(task_name="serve")
 

@@ -1,19 +1,16 @@
 from typing import Any
+
 import joblib
 import pandas as pd
+from feature_engine.encoding import RareLabelEncoder
+from feature_engine.imputation import (AddMissingIndicator, CategoricalImputer,
+                                       MeanMedianImputer)
+from feature_engine.selection import (DropConstantFeatures,
+                                      DropDuplicateFeatures,
+                                      SmartCorrelatedSelection)
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
-from feature_engine.encoding import RareLabelEncoder
-from feature_engine.imputation import (
-    AddMissingIndicator,
-    CategoricalImputer,
-    MeanMedianImputer,
-)
-from feature_engine.selection import (
-    DropConstantFeatures,
-    DropDuplicateFeatures,
-    SmartCorrelatedSelection,
-)
+
 from preprocessing import custom_transformers as transformers
 
 

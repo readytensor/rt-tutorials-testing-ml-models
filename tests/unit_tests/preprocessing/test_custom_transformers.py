@@ -1,16 +1,14 @@
-import pytest
-import pandas as pd
 import numpy as np
-from feature_engine.imputation import CategoricalImputer, AddMissingIndicator
+import pandas as pd
+import pytest
+from feature_engine.imputation import AddMissingIndicator, CategoricalImputer
 from sklearn.preprocessing import StandardScaler
-from src.preprocessing.custom_transformers import (
-    ColumnSelector,
-    TypeCaster,
-    TransformerWrapper,
-    ValueClipper,
-    MostFrequentImputer,
-    OneHotEncoderMultipleCols,
-)
+
+from src.preprocessing.custom_transformers import (ColumnSelector,
+                                                   MostFrequentImputer,
+                                                   OneHotEncoderMultipleCols,
+                                                   TransformerWrapper,
+                                                   TypeCaster, ValueClipper)
 
 
 # ColumnSelector tests

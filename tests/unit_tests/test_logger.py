@@ -1,6 +1,7 @@
 import logging
 from typing import Any
-from src.logger import get_logger, log_error, close_handlers
+
+from src.logger import close_handlers, get_logger, log_error
 
 
 def test_get_logger(caplog: Any) -> None:

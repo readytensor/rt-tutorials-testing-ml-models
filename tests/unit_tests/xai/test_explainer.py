@@ -1,14 +1,11 @@
-from pandas import DataFrame
-from typing import Any, List
 from pathlib import Path
+from typing import Any, List
+
+from pandas import DataFrame
 from py.path import local as LocalPath
 
-from xai.explainer import (
-    ShapClassificationExplainer,
-    fit_and_save_explainer,
-    load_explainer,
-    get_explanations_from_explainer,
-)
+from xai.explainer import (ShapClassificationExplainer, fit_and_save_explainer,
+                           get_explanations_from_explainer, load_explainer)
 
 
 def test_fit_explainer(transformed_train_inputs: DataFrame) -> None:

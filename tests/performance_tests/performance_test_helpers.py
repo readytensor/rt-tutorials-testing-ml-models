@@ -1,10 +1,11 @@
-import random
-from typing import Tuple, Dict
-import pandas as pd
-import numpy as np
 import csv
 import os
+import random
 import shutil
+from typing import Dict, Tuple
+
+import numpy as np
+import pandas as pd
 
 
 def set_seeds_for_data_gen():
