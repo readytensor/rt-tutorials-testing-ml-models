@@ -30,12 +30,10 @@ class ShapClassificationExplainer:
         """
         # We only save the data, but we dont fit explainer
         # until we need it to get explanations.
-        data = train_data.copy()
-        if data.shape[0] > self.max_saved_train_data_length:
-            subset_indices = np.random.choice(
-                train_data.shape[0], self.max_saved_train_data_length, replace=False
-            )
-            data = data[subset_indices]
+        if train_data.shape[0] > self.max_saved_train_data_length:
+            data = train_data.sample(self.max_saved_train_data_length, replace=False)
+        else:
+            data = train_data.copy()
         self._explainer_data = data
 
     def _build_explainer(self, predictor_model, class_names):
