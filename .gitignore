@@ -13,4 +13,9 @@ env.bak/
 venv.bak/
 
 # Testing
+.tox/
 .coverage
+.cache
+.pytest_cache/
+coverage.xml
+*.cover
